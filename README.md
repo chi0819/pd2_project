@@ -22,15 +22,15 @@
 ## 楊柏恩開發紀錄
 2024/5/31:<br>
 完成:<br>
-\t●新增SoundUtil類<br>
-\t●新增玩家子彈發射音效<br>
-\t●新增敵人(小飛機)爆炸音效<br>
-\t●新增Game Over音效<br>
-\t●新增背景音樂<br>
-\t●新增開始遊戲按鈕、Setting按鈕<br>
+[tab]●新增SoundUtil類<br>
+[tab]●新增玩家子彈發射音效<br>
+[tab]●新增敵人(小飛機)爆炸音效<br>
+[tab]●新增Game Over音效<br>
+[tab]●新增背景音樂<br>
+[tab]●新增開始遊戲按鈕、Setting按鈕<br>
 尚未完成:<br>
-\t●按鈕美工<br>
-\t●新增獲勝音效<br>
-\t●新增設定功能<br>
-\t●新增Boss爆炸音效<br>
+[tab]●按鈕美工<br>
+[tab]●新增獲勝音效<br>
+[tab]●新增設定功能<br>
+[tab]●新增Boss爆炸音效<br>
 ## 廖竑羿開發紀錄
