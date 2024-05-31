@@ -1,12 +1,44 @@
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicButtonUI;
+import javax.sound.sampled.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.*;
+
+//create a class that play sounds
+class SoundUtil {
+    private static Clip clip;
+
+    public static Clip playSound(String soundFile, boolean loop) {
+        try {
+            File soundPath = new File(soundFile);
+            if (soundPath.exists()) {
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(soundPath);
+                clip = AudioSystem.getClip();
+                clip.open(audioInput);
+                if (loop) {
+                    clip.loop(Clip.LOOP_CONTINUOUSLY);
+                }
+                clip.start();
+            } else {
+                System.out.println("Cannot find sound file: " + soundFile);
+            }
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+        return clip;
+    }
+
+    public static void stopSound(Clip clip) {
+        if (clip != null && clip.isRunning()) {
+            clip.stop();
+            clip.close();
+        }
+    }
+}
 
 class GameObj {
     Image img;
@@ -188,6 +220,7 @@ class BulletObj extends GameObj {
         }
         if (/*this.frame.bossObj != null &&*/ this.getRec().intersects(this.frame.planeObj.getRec())) {
             Planewar.state = 3;
+            SoundUtil.playSound("sounds\\plane_explode.wav",false);
         }
     }
     public Rectangle getRec() {
@@ -208,6 +241,7 @@ class EnemyObj extends GameObj {
         y += speed;
         if (this.getRec().intersects(this.frame.planeObj.getRec())) {
             Planewar.state = 3;
+            SoundUtil.playSound("sounds\\plane_explode.wav", false);
         }
         if (y > 600) {
             this.x = -200;
@@ -216,7 +250,6 @@ class EnemyObj extends GameObj {
         }
         for (ShellObj shellObj : GameUtil.shellObjList) {
             if (this.getRec().intersects(shellObj.getRec())) {
-                //System.out.println("haha");
                 shellObj.setX(-100);
                 shellObj.setY(100);
                 this.x = -200;
@@ -224,6 +257,7 @@ class EnemyObj extends GameObj {
                 GameUtil.removeList.add(shellObj);
                 GameUtil.removeList.add(this);
                 Planewar.score++;
+                SoundUtil.playSound("sounds\\enemy_explode.wav", false);
             }
         }
     }
@@ -301,6 +335,9 @@ public class Planewar extends JFrame{
     //public BossObj bossObj = new BossObj(GameUtil.bossImag,250,0,109,109,5,this);
     public BossObj bossObj = null;
 
+    JButton startButton;
+    JButton settingButton;
+
     public void launch() {
         this.setVisible(true);
         this.setSize(width,height);
@@ -308,11 +345,37 @@ public class Planewar extends JFrame{
         this.setTitle("Airplane Battle");
         this.setDefaultCloseOperation(3);
 
+        this.setLayout(null);
+        startButton = new JButton(new ImageIcon("imgs\\start_button.png"));
+        startButton.setBounds(185, 250, 200, 100);
+        startButton.setContentAreaFilled(false);
+        this.add(startButton);
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                state = 1;
+                startButton.setVisible(false);
+                settingButton.setVisible(false);
+                repaint();
+            }
+        });
+
+        settingButton = new JButton(new ImageIcon("imgs/setting_button.png"));
+        settingButton.setBounds(185, 360, 200, 100);
+        settingButton.setUI(new BasicButtonUI()); 
+        this.add(settingButton);
+        settingButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Settings dialog will be here.");
+            }
+        });
+
         GameUtil.gameObjList.add(obj);
         GameUtil.gameObjList.add(planeObj);
         //GameUtil.gameObjList.add(bossObj);
 
-        this.addMouseListener(new MouseAdapter() {
+        /*this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
@@ -321,7 +384,7 @@ public class Planewar extends JFrame{
                     repaint();
                 }
             }
-        });
+        });*/
 
         //switch to english to stop the game
         this.addKeyListener(new KeyAdapter() {
@@ -341,10 +404,19 @@ public class Planewar extends JFrame{
             }
         });
 
+        boolean isBgMusicPlaying = false;
+        Clip backgroundClip = null;
         while (true) {
             if (state == 1) {
                 createObj();
                 repaint();
+
+                if (!isBgMusicPlaying) {
+                    backgroundClip = SoundUtil.playSound("sounds\\backgroundMusic.wav", true);
+                    isBgMusicPlaying = true;
+                }
+            } else {
+                SoundUtil.stopSound(backgroundClip);
             }
             try {
                 Thread.sleep(25);
@@ -353,7 +425,7 @@ public class Planewar extends JFrame{
             }
         }
     }
-
+    
     @Override
     public void paint (Graphics g) {
         if (offScreenImage == null) {
@@ -365,9 +437,7 @@ public class Planewar extends JFrame{
             gImage.drawImage(GameUtil.bgImag, 0, 0, getWidth(), getHeight(), this);
             gImage.drawImage(GameUtil.bossImag,225,100,this);
             gImage.drawImage(GameUtil.explodeImag,210,350,this);
-            GameUtil.drawWord(gImage,"Start",Color.black,40,235,300);
-            //gImage.setFont(new Font("Arial", Font.BOLD, 40));
-            //gImage.drawString("Start",235,300);
+            //GameUtil.drawWord(gImage,"Start",Color.black,40,235,300);
         }
         if (state == 1) {
             for (int i=0 ; i<GameUtil.gameObjList.size() ; i++) {
@@ -377,6 +447,7 @@ public class Planewar extends JFrame{
         }
         if (state == 3) {
             gImage.drawImage(GameUtil.explodeImag, planeObj.getX() - 60, planeObj.getY() - 90,null);
+            SoundUtil.playSound("sounds\\lose.wav", false);
             GameUtil.drawWord(gImage,"GAME OVER",Color.RED,50,155,300);
             //gImage.setColor(Color.RED);
             //gImage.setFont(new Font("Arial", Font.BOLD, 50));
@@ -388,16 +459,14 @@ public class Planewar extends JFrame{
         }
         GameUtil.drawWord(gImage,"SCORE : " + score,Color.GREEN,40,30,100);
         g.drawImage(offScreenImage,0,0,null);
-        count++;
-
-        //delete all objects that fly out the frame
-        
+        count++;        
     }
 
     void createObj() {
         if (count % 15 == 0) {
             GameUtil.shellObjList.add(new ShellObj(GameUtil.shellImag,planeObj.getX()+3,planeObj.getY()-16,14,29,5,this));
             GameUtil.gameObjList.add(GameUtil.shellObjList.get(GameUtil.shellObjList.size() - 1));
+            SoundUtil.playSound("sounds\\plane_shoot1.wav", false);
         }
         if (count % 15 == 0) {
             GameUtil.enemyObjList.add(new EnemyObj(GameUtil.enemyImag,(int)(Math.random()*12)*50,0,49,36,5,this));
