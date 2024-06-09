@@ -32,7 +32,7 @@
 - 新增 Game Over 音效
 - 新增背景音樂
 - 新增開始遊戲按鈕、Setting 按鈕
-- 
+  
 2024/6/9<br>
 完成:
 - 新增 `SettingsDialog` 類
