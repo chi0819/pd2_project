@@ -22,6 +22,7 @@
 - home_button.png
 - exit_button.png
 - win.wav
+
 完成:
 - 部分註解與排版修正
 - state 可讀性提升(enum GameState)
