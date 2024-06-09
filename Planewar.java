@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
 
-//create a class that play sounds
+//Create a class that play sounds
 class SoundUtil {
 
     private static Clip clip;
@@ -399,7 +399,8 @@ public class Planewar extends JFrame{
         GAMING,
         PAUSE,
         GAMEOVER,
-        VICTORY    
+        VICTORY,
+        RETRY    
     }
 
     static int width = 600; //Window's size
@@ -417,6 +418,7 @@ public class Planewar extends JFrame{
 
     JButton startButton;
     JButton settingButton;
+    JButton retryButton;
 
     public void launch() {
         this.setVisible(true);
@@ -550,9 +552,26 @@ public class Planewar extends JFrame{
             gImage.drawImage(GameUtil.explodeImag, planeObj.getX() - 60, planeObj.getY() - 90,null);
             SoundUtil.playSound("sounds\\lose.wav", false);
             GameUtil.drawWord(gImage,"GAME OVER",Color.RED,50,155,300);
+           
             //gImage.setColor(Color.RED);
             //gImage.setFont(new Font("Arial", Font.BOLD, 50));
             //gImage.drawString("GAME OVER",155,300);
+
+            if (retryButton == null) {
+                retryButton = new JButton(new ImageIcon("imgs\\retry_button.png"));
+                retryButton.setBounds(215, 305, 174, 68);
+
+                //Click it and restart the game
+                retryButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        restartGame();
+                    }
+                });
+
+                this.add(retryButton);
+            }
+            retryButton.setVisible(true);
         }
 
         if (currentState == GameState.VICTORY) {
@@ -591,6 +610,31 @@ public class Planewar extends JFrame{
         if (enemyCount > 10 && bossObj == null) {
             bossObj = new BossObj(GameUtil.bossImag,250,0,109,109,5,this);
             GameUtil.gameObjList.add(bossObj);
+        }
+    }
+
+    //Reset Lists and variables
+    private void restartGame() {
+        GameUtil.gameObjList.clear();
+        GameUtil.bulletObjList.clear();
+        GameUtil.enemyObjList.clear();
+        GameUtil.shellObjList.clear();
+        GameUtil.removeList.clear();
+
+        obj = new BgObj(GameUtil.bgImag, 0, -435, 2);
+        planeObj = new PlaneObj(GameUtil.planeImag, 290, 550, 20, 30, 0, this);
+        bossObj = null;
+
+        GameUtil.gameObjList.add(obj);
+        GameUtil.gameObjList.add(planeObj);
+
+        currentState = GameState.GAMING;
+        score = 0;
+        count = 1;
+        enemyCount = 0;
+
+        if (retryButton != null) {
+            retryButton.setVisible(false);
         }
     }
 
