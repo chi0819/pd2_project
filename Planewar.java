@@ -8,7 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
 
-//create a class that set dialog
+/*create a class that set dialog
+* Variable Declaration: 
+* VolumeSlider for adjusting volume
+* Width/height Field for adjusting the size of frame
+*
+* Directions: 
+* Once the 'apply' button is clicked, this class will instantly change the value of relative parameters in PlaneWar.
+* This dialog will automatically show the current value of relative parameters.
+* You can check terminal to see if the setting function works.
+*/
 class SettingsDialog extends JDialog {
     private JSlider volumeSlider;
     private JTextField widthField;
@@ -61,7 +70,21 @@ class SettingsDialog extends JDialog {
     }
 }
 
-//create a class that play sounds
+/*create a class that play sounds
+* Variable Declaration: 
+* clip for tracing each sound that is playing
+* volumeControl for controling volume of each sound
+* 
+* Directions:
+* You can pass parameter 'soundFile' with path of sounds and parameter 'loop' for checking if this sound needs to play again and again.
+* For example, SoundUtil("music", true) means that "music" will be played repeatly.
+* Warning that playing a sound repeatly doesn't mean that a sound will be played before itself ends, which lead to needless resource occupation!
+* The 'playSound' function will adjust the volume of sounds before playing sounds, making sure that the setting of volume be recorded and reuse and will not play sounds at default volume each time.
+* 
+* You can use 'stopSound' function to stop sound that is playing, but you should declare a 'Clip' variable to save each clip of each sound.
+* 
+* Function 'adjustVolume' will only be called in setting dialog. 
+*/
 class SoundUtil {
     private static Clip clip;
     private static FloatControl volumeControl = null; // Added for volume control
@@ -398,14 +421,15 @@ public class Planewar extends JFrame{
     public static int score = 0;
     int count = 1;
     int enemyCount = 0;
-    boolean isBgMusicPlaying = false;
-    static Clip backgroundClip = null;
+    boolean isBgMusicPlaying = false; //this variable is for tracing if BGM is playing
+    static Clip backgroundClip = null; //this variable is for saving clip of BGM
 
     Image  offScreenImage  = null;
     BgObj obj = new BgObj(GameUtil.bgImag,0,-435,2);
     public PlaneObj planeObj = new PlaneObj(GameUtil.planeImag,290,550,20,30,0,this);
     public BossObj bossObj = null;
 
+    //declare three buttons
     JButton startButton;
     JButton settingButton;
     JButton retryButton;
@@ -421,7 +445,7 @@ public class Planewar extends JFrame{
         GameUtil.gameObjList.add(obj);
         GameUtil.gameObjList.add(planeObj);
 
-        //add 'START' and 'SETTING' button
+        //initialize attributes and add 'START' button
         startButton = new JButton(new ImageIcon(GameUtil.startButtonImage));
         startButton.setContentAreaFilled(false);
         startButton.setFocusPainted(false);
@@ -436,6 +460,7 @@ public class Planewar extends JFrame{
             }
         });
 
+        //initialize attributes and add 'SETTING' button
         settingButton = new JButton(new ImageIcon(GameUtil.settingButtonImage));
         settingButton.setContentAreaFilled(false);
         settingButton.setFocusPainted(false);
@@ -450,6 +475,7 @@ public class Planewar extends JFrame{
             }
         });
 
+        //initialize attributes of 'RETRY' button without adding it
         retryButton = new JButton(new ImageIcon(GameUtil.retryButtonImage));
         retryButton.setBounds(185, 250, 200, 110);
         retryButton.setContentAreaFilled(false);
@@ -476,6 +502,7 @@ public class Planewar extends JFrame{
             }
         });
 
+        //We need to set focus on KeyListener after using JButton
         this.setFocusable(true);
         this.requestFocusInWindow();
 
@@ -484,14 +511,18 @@ public class Planewar extends JFrame{
                 createObj();
                 repaint();
 
+                //play BGM if it's not playing
                 if (!isBgMusicPlaying) {
                     backgroundClip = SoundUtil.playSound("sounds/backgroundMusic.wav", true);
                     isBgMusicPlaying = true;
                 }
+                
+                //set all buttons to be invisible during state 1
                 startButton.setVisible(false);
                 settingButton.setVisible(false);
                 retryButton.setVisible(false);
             } else if (state == 2 || state == 3 || state == 4) {
+                //state 2 for pasuing, BGM plays ongoing
                 if (state != 2) {
                     SoundUtil.stopSound(backgroundClip);
                 }
@@ -514,6 +545,7 @@ public class Planewar extends JFrame{
         }
     }
 
+    // Clear other game objects as needed
     private void restartGame() {
         state = 0;
         score = 0;
@@ -528,7 +560,6 @@ public class Planewar extends JFrame{
         GameUtil.gameObjList.add(planeObj);
         bossObj = null;
         enemyCount = 0;
-        // Clear other game objects as needed
     }
 
     @Override
