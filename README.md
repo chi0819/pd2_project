@@ -33,6 +33,7 @@
 
 尚未完成:
 - home功能
+- victory後遊戲走向
 
 發現小小bug:
 - 從頭到尾空白鍵暫停功能皆無實現(Planewar.java line 86-104)
