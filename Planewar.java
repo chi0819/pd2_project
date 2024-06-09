@@ -424,6 +424,10 @@ public class Planewar extends JFrame{
     JButton homeButton;
     JButton exitButton;
 
+    Clip backgroundMusic;
+    Clip lose;
+    Clip win;
+
     public void launch() {
         this.setVisible(true);
         this.setSize(width,height);
@@ -553,13 +557,13 @@ public class Planewar extends JFrame{
         }
 
         if (currentState == GameState.GAMEOVER) {
-
+           SoundUtil.stopSound(backgroundMusic);
             if(score>highestScore){
                 highestScore=score;
             }
 
             gImage.drawImage(GameUtil.explodeImag, planeObj.getX() - 60, planeObj.getY() - 90,null);
-            SoundUtil.playSound("sounds\\lose.wav", false);
+            lose = SoundUtil.playSound("sounds\\lose.wav", false);
             Color customColor = new Color(238, 250, 0);
             GameUtil.drawWord(gImage, "HIGHEST SCORE: "+highestScore, customColor, 45, 100, 200);
             GameUtil.drawWord(gImage,"GAME OVER",Color.RED,50,155,250);
@@ -622,12 +626,13 @@ public class Planewar extends JFrame{
         }
 
         if (currentState == GameState.VICTORY) {
+            SoundUtil.stopSound(backgroundMusic);
 
             if(score>highestScore){
                 highestScore=score;
             }
 
-            SoundUtil.playSound("sounds\\win.wav", false);
+            win = SoundUtil.playSound("sounds\\win.wav", false);
             Color customColor = new Color(238, 250, 0); //customize color
             GameUtil.drawWord(gImage, "HIGHEST SCORE: "+highestScore, customColor, 45, 70, 200);
             gImage.drawImage(GameUtil.explodeImag, bossObj.getX() - 30, bossObj.getY() - 40,null);
@@ -687,6 +692,7 @@ public class Planewar extends JFrame{
 
     //Reset Lists and variables after gameover
     private void restartGameAfterGameOver() {
+        SoundUtil.stopSound(lose);
 
         GameUtil.gameObjList.clear();
         GameUtil.bulletObjList.clear();
@@ -715,11 +721,12 @@ public class Planewar extends JFrame{
         homeButton = null;
         exitButton = null;
 
-        SoundUtil.playSound("sounds\\backgroundMusic.wav", true);
+        backgroundMusic = SoundUtil.playSound("sounds\\backgroundMusic.wav", true);
     }
 
     //Reset Lists and variables after victory
     private void restartGameAfterVictory() {
+        SoundUtil.stopSound(win);
 
         GameUtil.gameObjList.clear();
         GameUtil.bulletObjList.clear();
@@ -744,7 +751,7 @@ public class Planewar extends JFrame{
         
         retryButton = null;
 
-        SoundUtil.playSound("sounds\\backgroundMusic.wav", true);
+        backgroundMusic = SoundUtil.playSound("sounds\\backgroundMusic.wav", true);
     }
 
     public static void main (String args[]) {
