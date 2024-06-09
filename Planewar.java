@@ -627,6 +627,7 @@ public class Planewar extends JFrame{
                 highestScore=score;
             }
 
+            SoundUtil.playSound("sounds\\win.wav", false);
             Color customColor = new Color(238, 250, 0); //customize color
             GameUtil.drawWord(gImage, "HIGHEST SCORE: "+highestScore, customColor, 45, 70, 200);
             gImage.drawImage(GameUtil.explodeImag, bossObj.getX() - 30, bossObj.getY() - 40,null);
@@ -686,7 +687,7 @@ public class Planewar extends JFrame{
 
     //Reset Lists and variables after gameover
     private void restartGameAfterGameOver() {
-        
+
         GameUtil.gameObjList.clear();
         GameUtil.bulletObjList.clear();
         GameUtil.enemyObjList.clear();
@@ -713,7 +714,8 @@ public class Planewar extends JFrame{
         retryButton = null;
         homeButton = null;
         exitButton = null;
-        
+
+        SoundUtil.playSound("sounds\\backgroundMusic.wav", true);
     }
 
     //Reset Lists and variables after victory
@@ -741,6 +743,8 @@ public class Planewar extends JFrame{
         retryButton.setVisible(false);
         
         retryButton = null;
+
+        SoundUtil.playSound("sounds\\backgroundMusic.wav", true);
     }
 
     public static void main (String args[]) {
