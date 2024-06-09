@@ -22,6 +22,7 @@
 - 一些無關緊要的程式可讀性修正
 - retry功能實現於gameover victory
 - exit 功能實現於 gameover
+- 歷史最高分紀錄
 
 尚未完成:
 - home功能
