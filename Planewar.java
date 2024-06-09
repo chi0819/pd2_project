@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
 
+
 //Create a class that play sounds
 class SoundUtil {
 
@@ -403,6 +404,7 @@ public class Planewar extends JFrame{
         RETRY    
     }
 
+    public static int highestScore=0;
     static int width = 600; //Window's size
     static int height = 600;
     public static Planewar.GameState currentState = GameState.INITIAL;
@@ -419,6 +421,8 @@ public class Planewar extends JFrame{
     JButton startButton;
     JButton settingButton;
     JButton retryButton;
+    JButton homeButton;
+    JButton exitButton;
 
     public void launch() {
         this.setVisible(true);
@@ -549,34 +553,101 @@ public class Planewar extends JFrame{
         }
 
         if (currentState == GameState.GAMEOVER) {
+
+            if(score>highestScore){
+                highestScore=score;
+            }
+
             gImage.drawImage(GameUtil.explodeImag, planeObj.getX() - 60, planeObj.getY() - 90,null);
             SoundUtil.playSound("sounds\\lose.wav", false);
-            GameUtil.drawWord(gImage,"GAME OVER",Color.RED,50,155,300);
-           
+            Color customColor = new Color(238, 250, 0);
+            GameUtil.drawWord(gImage, "HIGHEST SCORE: "+highestScore, customColor, 45, 100, 200);
+            GameUtil.drawWord(gImage,"GAME OVER",Color.RED,50,155,250);
+                       
             //gImage.setColor(Color.RED);
             //gImage.setFont(new Font("Arial", Font.BOLD, 50));
             //gImage.drawString("GAME OVER",155,300);
 
+            //retryButton makes you try the game again
             if (retryButton == null) {
                 retryButton = new JButton(new ImageIcon("imgs\\retry_button.png"));
-                retryButton.setBounds(215, 305, 174, 68);
+                retryButton.setBounds(215, 255, 174, 68);
 
                 //Click it and restart the game
                 retryButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        restartGame();
+                        restartGameAfterGameOver();
                     }
                 });
 
                 this.add(retryButton);
             }
             retryButton.setVisible(true);
+
+            //homebutton makes you go to home page
+            if (homeButton == null) {
+                homeButton = new JButton(new ImageIcon("imgs\\home_button.png"));
+                homeButton.setBounds(215, 343, 174, 68);
+
+                homeButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        restartGameAfterGameOver(); //it needs to be revised with a function turn it to start page//
+                    }
+                });
+
+                this.add(homeButton);
+            }
+
+            homeButton.setVisible(true);
+            
+            //exitbutton makes you close the game 
+            if (exitButton == null) {
+                exitButton = new JButton(new ImageIcon("imgs\\exit_button.png"));
+                exitButton.setBounds(215, 431, 174, 68);
+
+                exitButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dispose();
+                        System.exit(0); //Add this line to make sure it closed correctly
+                    }
+                });
+
+                this.add(exitButton);
+            }
+
+            exitButton.setVisible(true);  
         }
 
         if (currentState == GameState.VICTORY) {
+
+            if(score>highestScore){
+                highestScore=score;
+            }
+
+            Color customColor = new Color(238, 250, 0); //customize color
+            GameUtil.drawWord(gImage, "HIGHEST SCORE: "+highestScore, customColor, 45, 70, 200);
             gImage.drawImage(GameUtil.explodeImag, bossObj.getX() - 30, bossObj.getY() - 40,null);
-            GameUtil.drawWord(gImage,"YOU WON",Color.GREEN,50,155,300);
+            GameUtil.drawWord(gImage,"YOU WON",Color.GREEN,50,155,250);
+
+            if (retryButton == null) {
+                retryButton = new JButton(new ImageIcon("imgs\\retry_button.png"));
+                retryButton.setBounds(180, 343, 174, 68);
+
+                //Click it and restart the game
+                retryButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        restartGameAfterVictory();
+                    }
+                });
+
+                this.add(retryButton);
+            }
+            retryButton.setVisible(true);
+
         }
 
         GameUtil.drawWord(gImage,"SCORE : " + score,Color.GREEN,40,30,100);
@@ -606,15 +677,16 @@ public class Planewar extends JFrame{
             GameUtil.gameObjList.add(GameUtil.bulletObjList.get(GameUtil.bulletObjList.size() - 1));
         }
 
-        //Boss's shows up condition
+        //Boss's show up condition
         if (enemyCount > 10 && bossObj == null) {
             bossObj = new BossObj(GameUtil.bossImag,250,0,109,109,5,this);
             GameUtil.gameObjList.add(bossObj);
         }
     }
 
-    //Reset Lists and variables
-    private void restartGame() {
+    //Reset Lists and variables after gameover
+    private void restartGameAfterGameOver() {
+        
         GameUtil.gameObjList.clear();
         GameUtil.bulletObjList.clear();
         GameUtil.enemyObjList.clear();
@@ -629,13 +701,46 @@ public class Planewar extends JFrame{
         GameUtil.gameObjList.add(planeObj);
 
         currentState = GameState.GAMING;
+
+        score = 0;
+        count = 1;
+        enemyCount = 0;
+    
+        retryButton.setVisible(false);
+        homeButton.setVisible(false);
+        exitButton.setVisible(false);
+
+        retryButton = null;
+        homeButton = null;
+        exitButton = null;
+        
+    }
+
+    //Reset Lists and variables after victory
+    private void restartGameAfterVictory() {
+
+        GameUtil.gameObjList.clear();
+        GameUtil.bulletObjList.clear();
+        GameUtil.enemyObjList.clear();
+        GameUtil.shellObjList.clear();
+        GameUtil.removeList.clear();
+
+        obj = new BgObj(GameUtil.bgImag, 0, -435, 2);
+        planeObj = new PlaneObj(GameUtil.planeImag, 290, 550, 20, 30, 0, this);
+        bossObj = null;
+
+        GameUtil.gameObjList.add(obj);
+        GameUtil.gameObjList.add(planeObj);
+
+        currentState = GameState.GAMING;
+
         score = 0;
         count = 1;
         enemyCount = 0;
 
-        if (retryButton != null) {
-            retryButton.setVisible(false);
-        }
+        retryButton.setVisible(false);
+        
+        retryButton = null;
     }
 
     public static void main (String args[]) {
