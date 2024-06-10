@@ -1,8 +1,15 @@
-import java.awt.*;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.Rectangle;
+import javax.swing.ImageIcon;
 
-//Gmae Object settings and paintings
-class GameObj {
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JPanel;
+import javax.swing.JFrame;
 
+public class GameObj {
     Image img;
     int x;
     int y;
@@ -88,12 +95,10 @@ class GameObj {
         this.frame = frame;
     }
 
-    //Drawing image at specific coordinate without using observer
     public void paintSelf (Graphics gImage) {
-        gImage.drawImage(img, x, y,null); 
+        gImage.drawImage(img, x, y,null);
     } 
-
     public Rectangle getRec() {
         return new Rectangle(x,y,width,height);
-    }   
+    }
 }
