@@ -1,22 +1,30 @@
-import java.awt.*;
-import java.util.ArrayList;
+import java.awt.Image;
+import java.awt.Toolkit;
+import javax.swing.ImageIcon;
+
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JPanel;
+import javax.swing.JFrame;
+
 import java.util.List;
+import java.util.ArrayList;
 
-//Manage game resources and object lists for easy access and drawing
-class GameUtil {
-
+public class GameUtil {
     public static Image bgImag = Toolkit.getDefaultToolkit().getImage("imgs/bgImag.jpg");
-    public static Image bossImag = Toolkit.getDefaultToolkit().getImage("imgs/boss.png");
-    public static Image bulletImag = Toolkit.getDefaultToolkit().getImage("imgs/bullet.png");
-    public static Image enemyImag = Toolkit.getDefaultToolkit().getImage("imgs/enemy.png");
+    public static Image bossRickImag = Toolkit.getDefaultToolkit().getImage("imgs/rick.png");
+    public static Image bossTrumpImag = Toolkit.getDefaultToolkit().getImage("imgs/trump.png");
     public static Image explodeImag = Toolkit.getDefaultToolkit().getImage("imgs/explode.png");
     public static Image planeImag = Toolkit.getDefaultToolkit().getImage("imgs/plane.png");
     public static Image shellImag = Toolkit.getDefaultToolkit().getImage("imgs/shell.png");
-    
-    public static List<BulletObj> bulletObjList = new ArrayList<>();
-    public static List<EnemyObj> enemyObjList = new ArrayList<>();
+    public static Image enemyImag = Toolkit.getDefaultToolkit().getImage("imgs/enemy.png");
+    public static Image bulletImag = Toolkit.getDefaultToolkit().getImage("imgs/bullet.png");
+
     public static List<GameObj> gameObjList = new ArrayList<>();
-    public static List<ShellObj> shellObjList = new ArrayList<>();  
+    public static List<ShellObj> shellObjList = new ArrayList<>();
+    public static List<EnemyObj> enemyObjList = new ArrayList<>();
+    public static List<BulletObj> bulletObjList = new ArrayList<>();
     public static List<GameObj> removeList = new ArrayList<>();
 
     public static void drawWord (Graphics gImage,String str,Color color,int size,int x,int y) {
