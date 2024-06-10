@@ -1,32 +1,32 @@
-import java.awt.*;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.Rectangle;
+import javax.swing.ImageIcon;
 
-//Bullet moves, checks collision with you. If out of bounds, removes. If hits you, game over
-class BulletObj extends GameObj {
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JPanel;
+import javax.swing.JFrame;
 
+public class BulletObj extends GameObj {
     public BulletObj(Image img,int x,int y,int width,int height,double speed,Planewar frame) {
         super(img,x,y,width,height,speed,frame);
     }
-
     @Override
     public void paintSelf(Graphics gImage) {
-
         super.paintSelf(gImage);
         y += speed;
-
-        //Boss bullet added to removeList when it's at the bottom of window 
-        if (y > 600) {
+        if (y > height) {
             this.x = -300; //this coordinate can't be the same as "shell" and "enemy" (or it'll collide)
             this.y = 300;
             GameUtil.removeList.add(this);
         }
-
-        //If bullet collides with you, the game is over and also play gameover music
         if (/*this.frame.bossObj != null &&*/ this.getRec().intersects(this.frame.planeObj.getRec())) {
             Planewar.currentState = Planewar.GameState.GAMEOVER;
-            SoundUtil.playSound("sounds\\plane_explode.wav",false);
+            SoundUtil.playSound("sounds/plane_explode.wav",false);
         }
     }
-
     public Rectangle getRec() {
         return new Rectangle(x,y,width,height);
     }
