@@ -77,7 +77,12 @@ public class Planewar extends JFrame {
         settingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Settings dialog will be here.");
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        new GameSettings().setVisible(true);
+                    }
+                });
             }
         });
 
