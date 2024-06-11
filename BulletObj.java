@@ -17,7 +17,7 @@ public class BulletObj extends GameObj {
     public void paintSelf(Graphics gImage) {
         super.paintSelf(gImage);
         y += speed;
-        if (y > height) {
+        if (y > Planewar.height) {
             this.x = -300; //this coordinate can't be the same as "shell" and "enemy" (or it'll collide)
             this.y = 300;
             GameUtil.removeList.add(this);
