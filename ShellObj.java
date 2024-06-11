@@ -1,13 +1,13 @@
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Rectangle;
-import javax.swing.ImageIcon;
-
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
+
 import javax.swing.JPanel;
 import javax.swing.JFrame;
+import javax.swing.ImageIcon;
 
 public class ShellObj extends GameObj{
     @Override
@@ -23,7 +23,8 @@ public class ShellObj extends GameObj{
     public void paintSelf(Graphics gImage) {
         super.paintSelf(gImage);
         y -= speed;
-        if (y < 0) { //out of the frame
+        // If shell out of screen, remove it
+        if (y < 0) {
             this.x = -100;
             this.y = 100;
             GameUtil.removeList.add(this);

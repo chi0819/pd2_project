@@ -7,13 +7,23 @@
 ## 分工紀錄
 |成員|分工內容|
 |:--|:--|
-|林子齊|多樣化武器系統<br>遊戲彩蛋<br>遊戲結束動畫和回到大廳的流程|
+|林子齊|多樣化武器系統<br>不同等級的遊戲魔王<br>撰寫 Appendix 和註解|
 |劉承祐||
 |李安||
 |楊柏恩|遊戲大廳和操作設定<br>開始遊戲的流程<br>武器和爆炸音效|
 |廖竑羿|PvP模式|
 
 ## 林子齊開發紀錄
+2024/6/9<br>
+完成:
+- 創建不同遊戲難度的大魔王
+- 添加大魔王的音效
+
+2024/6/11<br>
+完成:
+- 添加程式碼註解
+- 添加音效
+
 
 ## 劉承祐開發紀錄
 
@@ -35,4 +45,55 @@
 - 新增設定功能
 - 新增 Boss 爆炸音效
 
+2024/6/9<br>
+完成:
+- 新增 `SettingsDialog` 類
+- 新增 Setting 視窗
+- 增加了調整背景音樂音量大小的功能
+- 增加調整視窗大小的功能
+- 修復了使用JButton後無法使用空白鍵暫停的BUG
+- 對按鈕美工做了進一步的優化
+- 將物件圖片移到GameUtil開頭的變數宣告中，增加代碼可讀性和可維護性
+
+尚未完成:
+- 按鈕美工的優化
+- 物件需隨著視窗大小做等比例的放大
+- 將音樂檔案移到GameUtil開頭的變數宣告中以取代在代碼中出現絕對路徑降低可維護性
+
 ## 廖竑羿開發紀錄
+
+# Appendix
+
+## Sounds
+因為音檔太大，所以放在 Google Drive 保存  
+如果有需要增加的音檔直接上傳即可  
+https://drive.google.com/drive/folders/1zjGFyvsrUDqzNFvgbRj6ktaB3DS74_zv?usp=sharing  
+全部下載下來後創建一個名叫 sounds 的資料夾，將音檔放在裡面  
+
+## Planewar.java  
+### public class Planewar extends JFrame
+#### Parameters
+- width, height : 遊戲視窗的大小
+- state : 使用 `enum` 紀錄目前遊戲的狀態
+    - INITIAL : 遊戲初始化
+    - GAMING : 遊戲進行中
+    - PAUSE : 遊戲暫停
+    - VICTORY : 遊戲勝利
+
+- score : 紀錄目前的遊戲分數
+- gameLevel : 遊戲目前的關卡，會根據目前打到的 Boss 等級而有所調整
+- bossAlive : 判斷 Boss 是否還存活
+- backGroundMusic : 紀錄目前的背景音樂，有 Boss 時會有專屬於 Boss 的音樂
+- planeObj : 玩家的戰鬥機物件
+- bossObj : Boss 的物件
+
+#### Functions
+
+## Util
+### public class SoundUtil
+#### Parameters
+- clip : 紀錄音頻資料
+
+#### Functions
+- `public static Clip playSound ( String soundFile, boolean loop )` : 播放音頻檔案
+- `public static void stopSound ( Clip clip )` : 暫停音頻播放

@@ -1,1 +1,4 @@
 *.class
+imgs
+sounds
+.DS_Store

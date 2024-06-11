@@ -1,6 +1,6 @@
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
-import javax.sound.sampled.*;
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
@@ -10,10 +10,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+
 import java.io.File;
+import javax.sound.sampled.*;
 
 public class Planewar extends JFrame {
 
+    // GameState store enum for gaming flow control
     public enum GameState {
         INITIAL,
         GAMING,
@@ -22,30 +25,59 @@ public class Planewar extends JFrame {
         VICTORY    
     }
 
+    // Gaming screen size
     static int width = 800;
     static int height = 800;
+
+    // Gaming stage control
     public static Planewar.GameState currentState = GameState.INITIAL;
+
+    // Player score
     public static int score = 0;
+
+    // gameLevel determine how many boss player defeat
     public static int gameLevel = 0;
+
+    /* Because bossObj is non static object
+     * Use static bossAlive to record boss is alive or not
+     */
     public static boolean bossAlive = false;
-    public static String backGroundMusic = "sounds/backgroundMusic.wav";
+
+    // Init background music is normal background music
+    public static String backGroundMusic = "sounds/backGroundMusic.wav";
+
+    /*
+     * Time counter
+     * When time pass 25ms
+     * Player's plane shoot one bullet and add one enemy to the screen
+     */
     int count = 1;
     int enemyCount = 0;
 
     Image offScreenImage = null;
     BgObj backGround = new BgObj(GameUtil.bgImag, 0, -435, 2);
+
+    // Init player's plane object and bossObj
     public PlaneObj planeObj = new PlaneObj(GameUtil.planeImag, width/2+10, height/3+80, 20, 30, 0, this);
     public BossObj bossObj = null;
 
+    // Button before gaming
     JButton startButton;
     JButton settingButton;
+
+    // Button when game over
     JButton retryButton;
 
     boolean bossMusicPlaying = true;
+
+    // Clip store background music information
     Clip backgroundClip = null;
     Clip lose = null;
     Clip win = null;
 
+    /* This function init Game screen parameter
+     * Provide setting option before starting the game
+     */
     public void launch() {
         this.setVisible(true);
         this.setSize(width, height);
@@ -81,13 +113,20 @@ public class Planewar extends JFrame {
             }
         });
 
+        // Add basic objects to game screen
         GameUtil.gameObjList.add(backGround);
         GameUtil.gameObjList.add(planeObj);
 
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == 32) {
+                /*
+                 * use getKeyCode() to detect keyboard input
+                 * For Windows, the spacebar keyCode is 32
+                 * For MacOS, the spacebar keyCode is 49
+                 * For Linux distro, the spacebar keyCode is 62
+                 */
+                if (e.getKeyCode() == 32 || e.getKeyCode() == 49 || e.getKeyCode() == 62) {
                     switch (currentState) {
                         case GAMING:
                             currentState = GameState.PAUSE;
@@ -107,15 +146,26 @@ public class Planewar extends JFrame {
                 repaint();
                 if(!bossAlive) bossObj = null;
                 if(bossObj != null && !bossMusicPlaying) {
+                    /*
+                     * When boss appear
+                     * Stop normal background music
+                     * Play background music for specific boss
+                     */
                     SoundUtil.stopSound(backgroundClip);
                     backgroundClip = SoundUtil.playSound(backGroundMusic, true);
                     bossMusicPlaying = true;
                 } else if(bossObj == null && bossMusicPlaying) {
+                    /*
+                     * When there is no boss
+                     * Stop previouse boss background music
+                     * Play normal background music
+                     */
                     SoundUtil.stopSound(backgroundClip);
-                    backgroundClip = SoundUtil.playSound("sounds/backgroundMusic.wav", true);
+                    backgroundClip = SoundUtil.playSound("sounds/backGroundMusic.wav", true);
                     bossMusicPlaying = false;
                 }
            } else {
+                // If GameOver stop background music
                 SoundUtil.stopSound(backgroundClip);
             }
             try {
@@ -128,23 +178,29 @@ public class Planewar extends JFrame {
 
     @Override
     public void paint(Graphics g) {
+
+        // Create gaming screen border
         if (offScreenImage == null) {
             offScreenImage = createImage(width, height);
         }
+
         Graphics gImage = offScreenImage.getGraphics();
         gImage.fillRect(0, 0, width, height);
+
         if (currentState == GameState.INITIAL) {
             gImage.drawImage(GameUtil.bgImag, 0, 0, getWidth(), getHeight(), this);
             gImage.drawImage(GameUtil.bossRickImag, width/10, height/6, this);
             gImage.drawImage(GameUtil.bossTrumpImag, (width*9)/13, height/9, this);
             gImage.drawImage(GameUtil.explodeImag, width/2-70, height/6, this);
         }
+
         if (currentState == GameState.GAMING) {
             for (int i = 0; i < GameUtil.gameObjList.size(); i++) {
                 GameUtil.gameObjList.get(i).paintSelf(gImage);
             }
             GameUtil.gameObjList.removeAll(GameUtil.removeList);
         }
+
         if (currentState == GameState.GAMEOVER) {
             SoundUtil.stopSound(backgroundClip);
             gImage.drawImage(GameUtil.explodeImag, planeObj.getX() - 60, planeObj.getY() - 90, null);
@@ -152,7 +208,7 @@ public class Planewar extends JFrame {
             GameUtil.drawWord(gImage, "GAME OVER", Color.RED, 50, width/2-150, height/3);
 
             if (retryButton == null) {
-                retryButton = new JButton(new ImageIcon("imgs\\retry_button.png"));
+                retryButton = new JButton(new ImageIcon("imgs/retry_button.png"));
                 retryButton.setBounds( width/2-90, height/3+20, 174, 68);
                 retryButton.setUI(new BasicButtonUI());
 
@@ -166,6 +222,7 @@ public class Planewar extends JFrame {
             }
             retryButton.setVisible(true);
         }
+
         if (currentState == GameState.VICTORY) {
             // gImage.drawImage(GameUtil.explodeImag, bossObj.getX() - 30, bossObj.getY() - 40, null);
             win = SoundUtil.playSound("sounds/100score.wav", false);
@@ -180,19 +237,21 @@ public class Planewar extends JFrame {
         if (count % 15 == 0) {
             GameUtil.shellObjList.add(new ShellObj(GameUtil.shellImag, planeObj.getX() + 3, planeObj.getY() - 16, 14, 29, 5, this));
             GameUtil.gameObjList.add(GameUtil.shellObjList.get(GameUtil.shellObjList.size() - 1));
-            SoundUtil.playSound("sounds/plane_shoot1.wav", false);
+            SoundUtil.playSound("sounds/plane_shoot.wav", false);
         }
+
         if (count % 15 == 0) {
             GameUtil.enemyObjList.add(new EnemyObj(GameUtil.enemyImag, (int) (Math.random() * (width/50)) * 50, 0, 49, 36, 5, this));
             GameUtil.gameObjList.add(GameUtil.enemyObjList.get(GameUtil.enemyObjList.size() - 1));
             enemyCount++;
         }
+
         if (count % 15 == 0 && bossObj != null) {
             GameUtil.bulletObjList.add(new BulletObj(GameUtil.bulletImag, bossObj.getX() + 40, bossObj.getY() + 85, 15, 25, 5, this));
             GameUtil.gameObjList.add(GameUtil.bulletObjList.get(GameUtil.bulletObjList.size() - 1));
         }
 
-        // Control Game Level and Boss Type 176
+        // Control Game Level and Boss Type
         if(gameLevel == 0 && score > 10 && bossObj == null) {
             gameLevel++;
             bossAlive = true;
@@ -236,7 +295,7 @@ public class Planewar extends JFrame {
         retryButton.setVisible(false);
         retryButton = null;
 
-        backgroundClip = SoundUtil.playSound("sounds\\backgroundMusic.wav", true);
+        backgroundClip = SoundUtil.playSound("sounds/backGroundMusic.wav", true);
     }
 
 
