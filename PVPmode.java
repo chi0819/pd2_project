@@ -16,8 +16,8 @@ public class PVPmode extends Planewar {
 
     Image offScreenImage = null;
     BgObj backGround = new BgObj(GameUtil.bgImag, 0, -435, 2);
-    PlayerPlaneObj player1;
-    PlayerPlaneObj player2;
+    PlayerPlaneObj player1; // 上 WASD
+    PlayerPlaneObj player2; // 下 鍵盤上下左右
 
     List<GameObj> gameObjList = new ArrayList<>();
     List<GameObj> removeList = new ArrayList<>();
@@ -36,8 +36,8 @@ public class PVPmode extends Planewar {
         this.setTitle("PvP Mode");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        player1 = new PlayerPlaneObj(GameUtil.planeImag, 100, 100, 50, 50, 10, this, 100);
-        player2 = new PlayerPlaneObj(GameUtil.planeImag, 100, 400, 50, 50, 10, this, 100);
+        player1 = new PlayerPlaneObj(GameUtil.planeImag, 100, 100, 50, 50, 10, this, 100, 1);
+        player2 = new PlayerPlaneObj(GameUtil.planeImag, 100, 400, 50, 50, 10, this, 100, 2);
 
         // 初始化遊戲物件列表
         if (gameObjList == null) {
@@ -79,30 +79,22 @@ public class PVPmode extends Planewar {
 
     // 處理飛機移動
     private void handleMovement() {
-        if (keyState[KeyEvent.VK_W]) {
+        if (keyState[KeyEvent.VK_W])
             player1.moveUp();
-        }
-        if (keyState[KeyEvent.VK_S]) {
+        if (keyState[KeyEvent.VK_S])
             player1.moveDown();
-        }
-        if (keyState[KeyEvent.VK_A]) {
+        if (keyState[KeyEvent.VK_A])
             player1.moveLeft();
-        }
-        if (keyState[KeyEvent.VK_D]) {
+        if (keyState[KeyEvent.VK_D])
             player1.moveRight();
-        }
-        if (keyState[KeyEvent.VK_UP]) {
+        if (keyState[KeyEvent.VK_UP])
             player2.moveUp();
-        }
-        if (keyState[KeyEvent.VK_DOWN]) {
+        if (keyState[KeyEvent.VK_DOWN])
             player2.moveDown();
-        }
-        if (keyState[KeyEvent.VK_LEFT]) {
+        if (keyState[KeyEvent.VK_LEFT])
             player2.moveLeft();
-        }
-        if (keyState[KeyEvent.VK_RIGHT]) {
+        if (keyState[KeyEvent.VK_RIGHT])
             player2.moveRight();
-        }
     }
 
     @Override
@@ -148,20 +140,31 @@ public class PVPmode extends Planewar {
     }
 
     public void createBullet(PlayerPlaneObj player) {
-        ShellObj bullet = new ShellObj(GameUtil.shellImag, player.getX() + 3, player.getY() - 16, 14, 9, 5, this);
+        int bulletSpeed;
+        int bulletY;
+
+        if (player.id == 1) {
+            bulletY = player.getY() + player.getHeight();
+            bulletSpeed = -5;
+        } else {
+            bulletY = player.getY() - 16;
+            bulletSpeed = 5;
+        }
+
+        ShellObj bullet = new ShellObj(GameUtil.shellImag, player.getX() + player.getWidth() / 2 - 3, bulletY, 14, 9,
+                bulletSpeed, this, player.id);
         gameObjList.add(bullet);
         GameUtil.shellObjList.add(bullet);
     }
 
-    // 檢查子彈與玩家之間的碰撞
     private void checkCollisions() {
         for (ShellObj shell : new ArrayList<>(GameUtil.shellObjList)) {
-            if (shell.getRec().intersects(player1.getRec())) {
+            if (shell.playerId != player1.id && shell.getRec().intersects(player1.getRec())) {
                 player1.reduceHealth(10);
                 removeList.add(shell);
                 GameUtil.removeList.add(shell);
             }
-            if (shell.getRec().intersects(player2.getRec())) {
+            if (shell.playerId != player2.id && shell.getRec().intersects(player2.getRec())) {
                 player2.reduceHealth(10);
                 removeList.add(shell);
                 GameUtil.removeList.add(shell);
