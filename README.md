@@ -16,28 +16,6 @@
 ## 林子齊開發紀錄
 
 ## 劉承祐開發紀錄
-2024/6/9<br>
-添加:
-- retry_button.png
-- home_button.png
-- exit_button.png
-- win.wav
-
-完成:
-- 部分註解與排版修正
-- state 可讀性提升(enum GameState)
-- 增加一些Clip變數使能關閉音樂
-- retry功能實現於gameover victory
-- exit 功能實現於 gameover
-- 歷史最高分紀錄
-
-尚未完成:
-- home功能
-- victory後遊戲走向
-
-發現小小bug:
-- 從頭到尾空白鍵暫停功能皆無實現(Planewar.java line 86-104)
-- 遊戲完全結束時拖拉視窗至角落有bug
 
 ## 李安開發紀錄
 
