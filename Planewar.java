@@ -77,12 +77,7 @@ public class Planewar extends JFrame {
         settingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new GameSettings().setVisible(true);
-                    }
-                });
+                //
             }
         });
 
