@@ -92,17 +92,18 @@ public class Planewar extends JFrame {
             if (state == 1) {
                 createObj();
                 repaint();
-                if(!bossAlive) bossObj = null;
-                if(bossObj != null && !bossMusicPlaying) {
+                if (!bossAlive)
+                    bossObj = null;
+                if (bossObj != null && !bossMusicPlaying) {
                     SoundUtil.stopSound(backgroundClip);
                     backgroundClip = SoundUtil.playSound(backGroundMusic, true);
                     bossMusicPlaying = true;
-                } else if(bossObj == null && bossMusicPlaying) {
+                } else if (bossObj == null && bossMusicPlaying) {
                     SoundUtil.stopSound(backgroundClip);
                     backgroundClip = SoundUtil.playSound("sounds/backgroundMusic.wav", true);
                     bossMusicPlaying = false;
                 }
-           } else {
+            } else {
                 SoundUtil.stopSound(backgroundClip);
             }
             try {
@@ -138,7 +139,8 @@ public class Planewar extends JFrame {
             GameUtil.drawWord(gImage, "GAME OVER", Color.RED, 50, 155, 300);
         }
         if (state == 4) {
-            // gImage.drawImage(GameUtil.explodeImag, bossObj.getX() - 30, bossObj.getY() - 40, null);
+            // gImage.drawImage(GameUtil.explodeImag, bossObj.getX() - 30, bossObj.getY() -
+            // 40, null);
             SoundUtil.playSound("sounds/100score.wav", false);
             GameUtil.drawWord(gImage, "YOU WON", Color.GREEN, 50, 155, 300);
         }
@@ -149,22 +151,25 @@ public class Planewar extends JFrame {
 
     void createObj() {
         if (count % 15 == 0) {
-            GameUtil.shellObjList.add(new ShellObj(GameUtil.shellImag, planeObj.getX() + 3, planeObj.getY() - 16, 14, 29, 5, this));
+            GameUtil.shellObjList
+                    .add(new ShellObj(GameUtil.shellImag, planeObj.getX() + 3, planeObj.getY() - 16, 14, 29, 5, this));
             GameUtil.gameObjList.add(GameUtil.shellObjList.get(GameUtil.shellObjList.size() - 1));
             SoundUtil.playSound("sounds/plane_shoot1.wav", false);
         }
         if (count % 15 == 0) {
-            GameUtil.enemyObjList.add(new EnemyObj(GameUtil.enemyImag, (int) (Math.random() * 12) * 50, 0, 49, 36, 5, this));
+            GameUtil.enemyObjList
+                    .add(new EnemyObj(GameUtil.enemyImag, (int) (Math.random() * 12) * 50, 0, 49, 36, 5, this));
             GameUtil.gameObjList.add(GameUtil.enemyObjList.get(GameUtil.enemyObjList.size() - 1));
             enemyCount++;
         }
         if (count % 15 == 0 && bossObj != null) {
-            GameUtil.bulletObjList.add(new BulletObj(GameUtil.bulletImag, bossObj.getX() + 40, bossObj.getY() + 85, 15, 25, 5, this));
+            GameUtil.bulletObjList
+                    .add(new BulletObj(GameUtil.bulletImag, bossObj.getX() + 40, bossObj.getY() + 85, 15, 25, 5, this));
             GameUtil.gameObjList.add(GameUtil.bulletObjList.get(GameUtil.bulletObjList.size() - 1));
         }
 
         // Control Game Level and Boss Type
-        if(gameLevel == 0 && score > 10 && bossObj == null) {
+        if (gameLevel == 0 && score > 10 && bossObj == null) {
             gameLevel++;
             bossAlive = true;
             bossObj = new BossObj(GameUtil.bossRickImag, 250, 20, 109, 109, 5, gameLevel, this);
@@ -172,7 +177,7 @@ public class Planewar extends JFrame {
             GameUtil.gameObjList.add(bossObj);
         }
 
-        if(gameLevel == 1 && score > 30 && bossObj == null) {
+        if (gameLevel == 1 && score > 30 && bossObj == null) {
             gameLevel++;
             bossAlive = true;
             bossObj = new BossObj(GameUtil.bossTrumpImag, 250, 20, 109, 109, 5, gameLevel, this);
@@ -186,4 +191,3 @@ public class Planewar extends JFrame {
         gameWin.launch();
     }
 }
-
