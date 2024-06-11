@@ -65,10 +65,11 @@
 # Appendix
 
 ## Sounds
-因為音檔太大，所以放在 Google Drive 保存  
-如果有需要增加的音檔直接上傳即可  
+因為音檔和圖檔太大，所以放在 Google Drive 保存  
+如果有需要增加的音檔和圖檔直接上傳即可  
 https://drive.google.com/drive/folders/1zjGFyvsrUDqzNFvgbRj6ktaB3DS74_zv?usp=sharing  
-全部下載下來後創建一個名叫 sounds 的資料夾，將音檔放在裡面  
+創建一個名叫 sounds 的資料夾，將音檔放在裡面  
+創建一個名叫 imgs 的資料夾，將圖檔放在裡面  
 
 ## Planewar.java  
 ### public class Planewar extends JFrame
