@@ -299,5 +299,6 @@ public class Planewar extends JFrame {
         reinitializeComponents(gameWin);
         gameWin.launch();
     }
+    
 }
 
