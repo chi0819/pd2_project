@@ -8,14 +8,23 @@ import java.awt.Font;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> PVPmode_0613
 public class BgObj extends GameObj {
     public BgObj() {
         super();
     }
+<<<<<<< HEAD
     public BgObj(Image img, int x, int y, double speed) {
         super(img,x,y,speed);
+=======
+
+    public BgObj(Image img, int x, int y, double speed) {
+        super(img, x, y, speed);
+>>>>>>> PVPmode_0613
     }
 
     @Override

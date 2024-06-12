@@ -1,6 +1,7 @@
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Rectangle;
+<<<<<<< HEAD
 import javax.swing.ImageIcon;
 
 import java.awt.Graphics;
@@ -9,6 +10,20 @@ import java.awt.Font;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 
+=======
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Font;
+
+import javax.swing.JPanel;
+import javax.swing.JFrame;
+import javax.swing.ImageIcon;
+
+/*
+ * Implement all attributes use in Object on screen
+ * Includes : BossObj, BulletObj, EnemyObj, PlaneObj
+ */
+>>>>>>> PVPmode_0613
 public class GameObj {
     Image img;
     int x;
@@ -77,13 +92,22 @@ public class GameObj {
     public GameObj() {
 
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> PVPmode_0613
     public GameObj(Image img, int x, int y, double speed) {
         this.img = img;
         this.x = x;
         this.y = y;
         this.speed = speed;
     }
+<<<<<<< HEAD
     public GameObj(Image img,int x,int y,int width,int height,double speed,Planewar frame) {
+=======
+
+    public GameObj(Image img, int x, int y, int width, int height, double speed, Planewar frame) {
+>>>>>>> PVPmode_0613
         this.img = img;
         this.x = x;
         this.y = y;
@@ -93,10 +117,19 @@ public class GameObj {
         this.frame = frame;
     }
 
+<<<<<<< HEAD
     public void paintSelf (Graphics gImage) {
         gImage.drawImage(img, x, y,null);
     } 
     public Rectangle getRec() {
         return new Rectangle(x,y,width,height);
+=======
+    public void paintSelf(Graphics gImage) {
+        gImage.drawImage(img, x, y, null);
+    }
+
+    public Rectangle getRec() {
+        return new Rectangle(x, y, width, height);
+>>>>>>> PVPmode_0613
     }
 }
