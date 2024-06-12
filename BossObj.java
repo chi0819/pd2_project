@@ -13,16 +13,18 @@ public class BossObj extends GameObj {
     int basiclife = 10;
     int life = 10;
     int gameLevel = 0;
-    public BossObj(Image img,int x,int y,int width,int height,double speed, int gameLevel,Planewar frame) {
-        super(img,x,y,width,height,speed,frame);
+
+    public BossObj(Image img, int x, int y, int width, int height, double speed, int gameLevel, Planewar frame) {
+        super(img, x, y, width, height, speed, frame);
         this.gameLevel = gameLevel;
         this.life = (gameLevel + 1) * 10;
         this.basiclife = (gameLevel + 1) * 10;
     }
+
     @Override
     public void paintSelf(Graphics gImage) {
         super.paintSelf(gImage);
-        if (x > Planewar.width-100 || x < -50) {
+        if (x > Planewar.width - 100 || x < -50) {
             speed = -speed;
         }
         x += speed;
@@ -36,15 +38,17 @@ public class BossObj extends GameObj {
             if (life <= 0) {
                 GameUtil.removeList.add(this);
                 Planewar.bossAlive = false;
-                if(gameLevel == 2) Planewar.currentState = Planewar.GameState.VICTORY;
+                if (gameLevel == 2)
+                    Planewar.currentState = Planewar.GameState.VICTORY;
             }
         }
         gImage.setColor(Color.white);
-        gImage.fillRect(20,40,100,10);
+        gImage.fillRect(20, 40, 100, 10);
         gImage.setColor(Color.red);
-        gImage.fillRect(20,40,(life*(100))/basiclife,10);
+        gImage.fillRect(20, 40, (life * (100)) / basiclife, 10);
     }
+
     public Rectangle getRec() {
-        return new Rectangle(x,y,width,height);
+        return new Rectangle(x, y, width, height);
     }
 }

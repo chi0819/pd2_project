@@ -13,9 +13,11 @@ public class EnemyObj extends GameObj {
     public EnemyObj() {
         super();
     }
-    public EnemyObj(Image img,int x,int y,int width,int height,double speed,Planewar frame) {
-        super(img,x,y,width,height,speed,frame);
+
+    public EnemyObj(Image img, int x, int y, int width, int height, double speed, Planewar frame) {
+        super(img, x, y, width, height, speed, frame);
     }
+
     @Override
     public void paintSelf(Graphics gImage) {
         super.paintSelf(gImage);
@@ -48,7 +50,8 @@ public class EnemyObj extends GameObj {
             }
         }
     }
+
     public Rectangle getRec() {
-        return new Rectangle(x,y,width,height);
+        return new Rectangle(x, y, width, height);
     }
 }
