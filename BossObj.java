@@ -52,4 +52,5 @@ public class BossObj extends GameObj {
     public Rectangle getRec() {
         return new Rectangle(x,y,width,height);
     }
+    
 }
