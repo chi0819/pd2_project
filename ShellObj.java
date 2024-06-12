@@ -14,12 +14,15 @@ public class ShellObj extends GameObj{
     public Image getImage() {
         return super.getImage();
     }
+
     public ShellObj() {
         super();
     }
+
     public ShellObj(Image img,int x,int y,int width,int height,double speed,Planewar frame) {
         super(img,x,y,width,height,speed,frame);
     }
+
     public void paintSelf(Graphics gImage) {
         super.paintSelf(gImage);
         y -= speed;
@@ -29,6 +32,7 @@ public class ShellObj extends GameObj{
             GameUtil.removeList.add(this);
         }
     }
+    
     public Rectangle getRec() {
         return new Rectangle(x,y,width,height);
     }
