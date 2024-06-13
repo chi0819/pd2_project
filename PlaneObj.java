@@ -17,9 +17,11 @@ public class PlaneObj extends GameObj{
     public Image getImage() {
         return super.getImage();
     }
+    
     public PlaneObj() {
         super();
     }
+
     public PlaneObj(Image img,int x,int y,int width,int height,double speed,Planewar frame) {
         super(img,x,y,width,height,speed,frame);
         this.frame.addMouseMotionListener(new MouseAdapter() {
@@ -30,6 +32,7 @@ public class PlaneObj extends GameObj{
             }
         });
     }
+
     @Override
     public void paintSelf(Graphics gImage) {
         super.paintSelf(gImage);
@@ -37,6 +40,7 @@ public class PlaneObj extends GameObj{
             Planewar.currentState = Planewar.GameState.GAMEOVER;
         }
     }
+
     public Rectangle getRec() {
         return new Rectangle(x,y,width,height);
     }
