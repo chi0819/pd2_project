@@ -42,7 +42,7 @@ public class EnemyObj extends GameObj {
                 GameUtil.removeList.add(shellObj);
                 GameUtil.removeList.add(this);
                 Planewar.score++;
-                SoundUtil.playSoundWithVolume("sounds/enemy_explode.wav", false, Planewar.volume);
+                SoundUtil.playSoundWithVolume("sounds/enemy_explode.wav", false, Planewar.volume*0.9f);
             }
         }
     }
