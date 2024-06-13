@@ -172,6 +172,7 @@ public class Planewar extends JFrame {
         }
         if (currentState == GameState.GAMEOVER) {
             SoundUtil.stopSound(backgroundClip);
+            SoundUtil.stopSound(homestart);
             gImage.drawImage(GameUtil.explodeImag, planeObj.getX() - 60, planeObj.getY() - 90, null);
             lose = SoundUtil.playSoundWithVolume("sounds/lose.wav", false, volume);
             GameUtil.drawWord(gImage, "GAME OVER", Color.RED, 50, width/2-150, height/3);
