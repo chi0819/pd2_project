@@ -88,8 +88,8 @@ public class GameObj {
         this.y = y;
         this.speed = speed;
     }
-    
-    public GameObj(Image img,int x,int y,int width,int height,double speed,Planewar frame) {
+
+    public GameObj(Image img, int x, int y, int width, int height, double speed, Planewar frame) {
         this.img = img;
         this.x = x;
         this.y = y;
@@ -99,10 +99,11 @@ public class GameObj {
         this.frame = frame;
     }
 
-    public void paintSelf (Graphics gImage) {
-        gImage.drawImage(img, x, y,null);
-    } 
+    public void paintSelf(Graphics gImage) {
+        gImage.drawImage(img, x, y, null);
+    }
+
     public Rectangle getRec() {
-        return new Rectangle(x,y,width,height);
+        return new Rectangle(x, y, width, height);
     }
 }

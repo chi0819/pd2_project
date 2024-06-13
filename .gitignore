@@ -1,4 +1,14 @@
 *.class
+<<<<<<< HEAD
+.DS_Store
+sounds
+=======
+<<<<<<< HEAD
 imgs
 sounds
 .DS_Store
+=======
+.DS_Store
+sounds
+>>>>>>> fb6a865 (add gameLevel with 2 bosses, add Appendix, add audio for bossed only)
+>>>>>>> PVPmode_0613

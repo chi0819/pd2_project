@@ -8,14 +8,13 @@ import java.awt.Font;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 
-
-
 public class BgObj extends GameObj {
     public BgObj() {
         super();
     }
+
     public BgObj(Image img, int x, int y, double speed) {
-        super(img,x,y,speed);
+        super(img, x, y, speed);
     }
 
     @Override

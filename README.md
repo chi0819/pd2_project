@@ -61,6 +61,28 @@
 - 將音樂檔案移到GameUtil開頭的變數宣告中以取代在代碼中出現絕對路徑降低可維護性
 
 ## 廖竑羿開發紀錄
+2024/6/10<br>
+完成:
+- 新增 `PVPmode` 類，完成雙人模式畫面及功能雛形
+- 新增 `PlayerPlaneObj` 類
+- 修改 `ShellObj` 類之子彈出界條件
+- 修復碰撞判定及扣血不正確問題
+  
+尚未完成：
+- 撞到自身子彈會扣血問題
+- 圖片方向問題
+- 飛機邊界問題
+- 勝負判斷及畫面
+
+2024/6/12<br>
+完成:
+- 修正子彈撞到自身會扣血的bug
+- 加入移動時邊界條件
+- 改變 player1 圖片方向
+
+尚未完成：
+- 子彈圖片方向
+- 勝負判斷及畫面
 
 # Appendix
 
@@ -89,6 +111,10 @@ https://drive.google.com/drive/folders/1zjGFyvsrUDqzNFvgbRj6ktaB3DS74_zv?usp=sha
 - bossObj : Boss 的物件
 
 #### Functions
+
+## PVPmode.java  
+- player1 : 鍵盤 WASD 控制方向
+- player2 : 鍵盤上下左右控制方向
 
 ## Util
 ### public class SoundUtil
