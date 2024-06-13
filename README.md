@@ -1,11 +1,5 @@
 # 程式設計期末專題開發紀錄
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 
-=======
->>>>>>> fb6a865 (add gameLevel with 2 bosses, add Appendix, add audio for bossed only)
->>>>>>> PVPmode_0613
 ## 大綱
 - 主題 : 飛機大戰
 - 介紹 : 復刻飛機大戰遊戲，並且添加新功能
@@ -13,15 +7,7 @@
 ## 分工紀錄
 |成員|分工內容|
 |:--|:--|
-<<<<<<< HEAD
-|林子齊|多樣化武器系統<br>遊戲彩蛋<br>遊戲大魔王設定<br>撰寫 Appendix|
-=======
-<<<<<<< HEAD
 |林子齊|多樣化武器系統<br>不同等級的遊戲魔王<br>撰寫 Appendix 和註解|
-=======
-|林子齊|多樣化武器系統<br>遊戲彩蛋<br>遊戲大魔王設定<br>撰寫 Appendix|
->>>>>>> fb6a865 (add gameLevel with 2 bosses, add Appendix, add audio for bossed only)
->>>>>>> PVPmode_0613
 |劉承祐||
 |李安||
 |楊柏恩|遊戲大廳和操作設定<br>開始遊戲的流程<br>武器和爆炸音效|
@@ -30,9 +16,6 @@
 ## 林子齊開發紀錄
 2024/6/9<br>
 完成:
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 - 創建不同遊戲難度的大魔王
 - 添加大魔王的音效
 
@@ -42,16 +25,6 @@
 - 添加音效
 
 
-=======
->>>>>>> PVPmode_0613
-- 拆分大的 Planewar.java
-- 創建不同遊戲難度的大魔王
-- 添加大魔王的音效
-
-<<<<<<< HEAD
-=======
->>>>>>> fb6a865 (add gameLevel with 2 bosses, add Appendix, add audio for bossed only)
->>>>>>> PVPmode_0613
 ## 劉承祐開發紀錄
 
 ## 李安開發紀錄
@@ -65,9 +38,6 @@
 - 新增 Game Over 音效
 - 新增背景音樂
 - 新增開始遊戲按鈕、Setting 按鈕
-<<<<<<< HEAD
-  
-=======
 
 尚未完成:
 - 按鈕美工
@@ -75,8 +45,6 @@
 - 新增設定功能
 - 新增 Boss 爆炸音效
 
-<<<<<<< HEAD
->>>>>>> PVPmode_0613
 2024/6/9<br>
 完成:
 - 新增 `SettingsDialog` 類
@@ -87,9 +55,6 @@
 - 對按鈕美工做了進一步的優化
 - 將物件圖片移到GameUtil開頭的變數宣告中，增加代碼可讀性和可維護性
 
-<<<<<<< HEAD
-## 廖竑羿開發紀錄
-=======
 尚未完成:
 - 按鈕美工的優化
 - 物件需隨著視窗大小做等比例的放大
@@ -118,56 +83,25 @@
 尚未完成：
 - 子彈圖片方向
 - 勝負判斷及畫面
-=======
-## 廖竑羿開發紀錄
->>>>>>> fb6a865 (add gameLevel with 2 bosses, add Appendix, add audio for bossed only)
->>>>>>> PVPmode_0613
 
 # Appendix
 
 ## Sounds
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 因為音檔和圖檔太大，所以放在 Google Drive 保存  
 如果有需要增加的音檔和圖檔直接上傳即可  
 https://drive.google.com/drive/folders/1zjGFyvsrUDqzNFvgbRj6ktaB3DS74_zv?usp=sharing  
 創建一個名叫 sounds 的資料夾，將音檔放在裡面  
 創建一個名叫 imgs 的資料夾，將圖檔放在裡面  
-=======
->>>>>>> PVPmode_0613
-因為音檔太大，所以放在 Google Drive 保存  
-如果有需要增加的音檔直接上傳即可  
-https://drive.google.com/drive/folders/1zjGFyvsrUDqzNFvgbRj6ktaB3DS74_zv?usp=sharing  
-全部下載下來後創建一個名叫 sounds 的資料夾，將音檔放在裡面  
-<<<<<<< HEAD
-=======
->>>>>>> fb6a865 (add gameLevel with 2 bosses, add Appendix, add audio for bossed only)
->>>>>>> PVPmode_0613
 
 ## Planewar.java  
 ### public class Planewar extends JFrame
 #### Parameters
 - width, height : 遊戲視窗的大小
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 - state : 使用 `enum` 紀錄目前遊戲的狀態
     - INITIAL : 遊戲初始化
     - GAMING : 遊戲進行中
     - PAUSE : 遊戲暫停
     - VICTORY : 遊戲勝利
-=======
->>>>>>> PVPmode_0613
-- state : 紀錄目前遊戲的狀態
-    - 0 : 遊戲初始化
-    - 1 : 遊戲進行中
-    - 3 : 遊戲失敗
-    - 4 : 遊戲勝利
-<<<<<<< HEAD
-=======
->>>>>>> fb6a865 (add gameLevel with 2 bosses, add Appendix, add audio for bossed only)
->>>>>>> PVPmode_0613
 
 - score : 紀錄目前的遊戲分數
 - gameLevel : 遊戲目前的關卡，會根據目前打到的 Boss 等級而有所調整
@@ -178,16 +112,10 @@ https://drive.google.com/drive/folders/1zjGFyvsrUDqzNFvgbRj6ktaB3DS74_zv?usp=sha
 
 #### Functions
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 ## PVPmode.java  
 - player1 : 鍵盤 WASD 控制方向
 - player2 : 鍵盤上下左右控制方向
 
-=======
->>>>>>> fb6a865 (add gameLevel with 2 bosses, add Appendix, add audio for bossed only)
->>>>>>> PVPmode_0613
 ## Util
 ### public class SoundUtil
 #### Parameters
