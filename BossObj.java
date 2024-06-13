@@ -10,19 +10,6 @@ import javax.swing.JPanel;
 import javax.swing.JFrame;
 
 public class BossObj extends GameObj {
-<<<<<<< HEAD
-    int life = 10;
-    int gameLevel = 0;
-    public BossObj(Image img,int x,int y,int width,int height,double speed, int gameLevel,Planewar frame) {
-        super(img,x,y,width,height,speed,frame);
-        this.gameLevel = gameLevel;
-        this.life = (gameLevel + 1) * 10;
-    }
-    @Override
-    public void paintSelf(Graphics gImage) {
-        super.paintSelf(gImage);
-        if (x > 550 || x < -50) {
-=======
     int basiclife = 10;
     int life = 10;
     int gameLevel = 0;
@@ -38,7 +25,6 @@ public class BossObj extends GameObj {
     public void paintSelf(Graphics gImage) {
         super.paintSelf(gImage);
         if (x > Planewar.width - 100 || x < -50) {
->>>>>>> PVPmode_0613
             speed = -speed;
         }
         x += speed;
@@ -52,18 +38,6 @@ public class BossObj extends GameObj {
             if (life <= 0) {
                 GameUtil.removeList.add(this);
                 Planewar.bossAlive = false;
-<<<<<<< HEAD
-                if(gameLevel == 2) Planewar.state = 4;
-            }
-        }
-        gImage.setColor(Color.white);
-        gImage.fillRect(20,40,100,10);
-        gImage.setColor(Color.red);
-        gImage.fillRect(20,40,(life*100)/10,10);
-    }
-    public Rectangle getRec() {
-        return new Rectangle(x,y,width,height);
-=======
                 if (gameLevel == 2)
                     Planewar.currentState = Planewar.GameState.VICTORY;
             }
@@ -76,6 +50,5 @@ public class BossObj extends GameObj {
 
     public Rectangle getRec() {
         return new Rectangle(x, y, width, height);
->>>>>>> PVPmode_0613
     }
 }

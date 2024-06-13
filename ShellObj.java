@@ -1,7 +1,6 @@
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Rectangle;
-<<<<<<< HEAD
 import javax.swing.ImageIcon;
 
 import java.awt.Graphics;
@@ -9,15 +8,6 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
-=======
-import java.awt.Graphics;
-import java.awt.Color;
-import java.awt.Font;
-
-import javax.swing.JPanel;
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
->>>>>>> PVPmode_0613
 
 public class ShellObj extends GameObj {
     public int playerId; // 發射子彈的玩家ID
@@ -43,6 +33,7 @@ public class ShellObj extends GameObj {
     public void paintSelf(Graphics gImage) {
         super.paintSelf(gImage);
         y -= speed;
+        // If shell out of screen, remove it
         if (y < 0 || y > PVPmode.height) { // out of the frame
             this.x = -100;
             this.y = 100;
