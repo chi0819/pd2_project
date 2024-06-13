@@ -203,7 +203,7 @@ public class Planewar extends JFrame {
         if (count % shellProductivity == 0) {
             GameUtil.shellObjList.add(new ShellObj(GameUtil.shellImag, planeObj.getX() + 3, planeObj.getY() - 16, 14, 29, shellSpeed, this));
             GameUtil.gameObjList.add(GameUtil.shellObjList.get(GameUtil.shellObjList.size() - 1));
-            SoundUtil.playSoundWithVolume("sounds/plane_shoot1.wav", false, volume);
+            SoundUtil.playSoundWithVolume("sounds/plane_shoot1.wav", false, volume*0.95f);
         }
         if (count % enemyProductivity == 0) {
             GameUtil.enemyObjList.add(new EnemyObj(GameUtil.enemyImag, (int) (Math.random() * (width/50)) * 50, 0, 49, 36, enemySpeed, this));
