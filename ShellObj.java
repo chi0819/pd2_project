@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.ImageIcon;
 
 public class ShellObj extends GameObj {
-    public int playerId; // 發射子彈的玩家ID
+    public int playerId;
 
     @Override
     public Image getImage() {
@@ -27,7 +27,7 @@ public class ShellObj extends GameObj {
 
     public ShellObj(Image img, int x, int y, int width, int height, int speed, Planewar frame, int playerId) {
         super(img, x, y, width, height, speed, frame);
-        this.playerId = playerId; // 設置子彈來源玩家ID
+        this.playerId = playerId;
     }
 
     public void paintSelf(Graphics gImage) {

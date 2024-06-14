@@ -13,19 +13,18 @@ import java.util.ArrayList;
 public class PVPmode extends Planewar {
     static int width = 600;
     static int height = 600;
-    public static int state = 0; // 設置初始遊戲狀態為開始
+    public static int state = 0;
 
-    int count = 0; // 用於記錄更新迴圈次數
+    int count = 0; 
 
     Image offScreenImage = null;
     BgObj backGround = new BgObj(GameUtil.bgImag, 0, -435, 2);
-    PlayerPlaneObj player1; // 上 WASD
-    PlayerPlaneObj player2; // 下 鍵盤上下左右
+    PlayerPlaneObj player1; 
+    PlayerPlaneObj player2;
 
     List<GameObj> gameObjList = new ArrayList<>();
     List<GameObj> removeList = new ArrayList<>();
 
-    // 添加按鍵狀態標誌位
     boolean[] keyState = new boolean[256];
 
     public static void main(String[] args) {
@@ -42,7 +41,6 @@ public class PVPmode extends Planewar {
         player1 = new PlayerPlaneObj(GameUtil.planeImag, 100, 100, 50, 50, 10, this, 100, 1);
         player2 = new PlayerPlaneObj(GameUtil.planeImag, 100, 400, 50, 50, 10, this, 100, 2);
 
-        // 初始化遊戲物件列表
         if (gameObjList == null) {
             gameObjList = new ArrayList<>();
         }
@@ -50,16 +48,15 @@ public class PVPmode extends Planewar {
         gameObjList.add(player1);
         gameObjList.add(player2);
 
-        // 鍵盤處理器
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                keyState[e.getKeyCode()] = true; // 記錄按鍵狀態
+                keyState[e.getKeyCode()] = true;
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                keyState[e.getKeyCode()] = false; // 釋放鍵時重置按鍵狀態
+                keyState[e.getKeyCode()] = false;
             }
         });
 
@@ -67,20 +64,19 @@ public class PVPmode extends Planewar {
 
         while (true) {
             if (state == 1) {
-                handleMovement(); // 根據按鍵狀態移動飛機
-                createObj(); // 每15個循環發射子彈
-                checkCollisions(); // 每次更新循環時檢查碰撞
-                repaint(); // 觸發繪畫機制，重繪畫面
+                handleMovement();
+                createObj();
+                checkCollisions();
+                repaint();
             }
             try {
-                Thread.sleep(25); // 控制更新頻率
+                Thread.sleep(25);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    // 處理飛機移動
     private void handleMovement() {
         if (keyState[KeyEvent.VK_W])
             player1.moveUp();
@@ -102,19 +98,17 @@ public class PVPmode extends Planewar {
 
     @Override
     public void paint(Graphics g) {
-        // 如果 offScreenImage 尚未初始化，初始化並設置大小
         if (offScreenImage == null) {
             offScreenImage = createImage(width, height);
         }
         Graphics gImage = offScreenImage.getGraphics();
-        gImage.fillRect(0, 0, width, height); // 設置背景色為黑色
+        gImage.fillRect(0, 0, width, height);
 
         if (state == 0) {
             gImage.drawImage(GameUtil.bgImag, 0, 0, getWidth(), getHeight(), this);
         }
 
         if (state == 1) {
-            // 繪製背景和玩家物件
             for (GameObj obj : gameObjList) {
                 obj.paintSelf(gImage);
             }
@@ -122,15 +116,13 @@ public class PVPmode extends Planewar {
             gameObjList.removeAll(GameUtil.removeList);
         }
 
-        // 繪製玩家健康狀況
         gImage.setColor(Color.RED);
         gImage.drawString("Player 1 Health: " + player1.getHealth(), 50, 50);
         gImage.drawString("Player 2 Health: " + player2.getHealth(), 50, height - 50);
 
-        // 將緩衝區的畫面繪製到前端
         g.drawImage(offScreenImage, 0, 0, null);
 
-        count++; // 更新計數器
+        count++;
     }
 
     public void createObj() {
@@ -138,8 +130,6 @@ public class PVPmode extends Planewar {
             createBullet(player1);
             createBullet(player2);
         }
-
-        // 增加更多物件生成邏輯
     }
 
     public void createBullet(PlayerPlaneObj player) {
@@ -173,7 +163,7 @@ public class PVPmode extends Planewar {
                 GameUtil.removeList.add(shell);
             }
         }
-        // 移除被標記的子彈
+        
         gameObjList.removeAll(removeList);
         GameUtil.shellObjList.removeAll(removeList);
         removeList.clear();

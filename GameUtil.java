@@ -20,6 +20,20 @@ public class GameUtil {
     public static Image shellImag = Toolkit.getDefaultToolkit().getImage("imgs/shell.png");
     public static Image enemyImag = Toolkit.getDefaultToolkit().getImage("imgs/enemy.png");
     public static Image bulletImag = Toolkit.getDefaultToolkit().getImage("imgs/bullet.png");
+    public static Image startButton = Toolkit.getDefaultToolkit().getImage("imgs/start_button.png");
+    public static Image settingButton = Toolkit.getDefaultToolkit().getImage("imgs/setting_button.png");
+    public static Image retryButton = Toolkit.getDefaultToolkit().getImage("imgs/retry_button.png");
+    public static Image homeButoon = Toolkit.getDefaultToolkit().getImage("imgs/home_button.png");
+
+    public static String backGroundMusic = "sounds/backgroundMusic.wav";
+    public static String rickMusic = "sounds/rick.wav";
+    public static String loseSound = "sounds/lose.wav";
+    public static String score100Sound = "sounds/100score.wav";
+    public static String planeShootSound = "sounds/plane_shoot1.wav";
+    public static String shootingStarSound = "sounds/shootingStar.wav";
+    public static String planeExplodeSound = "sounds/plane_explode.wav";
+    public static String enemyExplodeSound = "sounds/enemy_explode.wav";
+    public static String testSound = "sounds//testsound.wav";
 
     public static List<GameObj> gameObjList = new ArrayList<>();
     public static List<ShellObj> shellObjList = new ArrayList<>();

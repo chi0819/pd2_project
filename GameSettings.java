@@ -15,7 +15,9 @@ import javax.sound.sampled.*;
 public class GameSettings extends JFrame {
 
     private Clip clip;
-    private int currentVolume = 80; 
+    private int currentVolume = (int)(Planewar.volume * 100);
+    private String currentDifficulty = Planewar.Dfficulty;
+    private String currentWindowSize = Planewar.widowSize;
 
     // Constructor to set up the GUI components
     public GameSettings() {
@@ -52,12 +54,14 @@ public class GameSettings extends JFrame {
         String[] difficulties = {"Easy", "Medium", "Hard", "Hell"};
         JComboBox<String> difficultyComboBox = new JComboBox<>(difficulties);
         difficultyComboBox.setFont(new Font("Arial", Font.PLAIN, 14));
+        difficultyComboBox.setSelectedItem(currentDifficulty);
 
         JLabel windowSizeLabel = new JLabel("Window Size:");
         windowSizeLabel.setFont(new Font("Arial", Font.BOLD, 14));
         String[] windowSizes = {"600x600", "800x800", "1000x1000"};
         JComboBox<String> windowSizeComboBox = new JComboBox<>(windowSizes);
         windowSizeComboBox.setFont(new Font("Arial", Font.PLAIN, 14));
+        windowSizeComboBox.setSelectedItem(currentWindowSize);
 
         JButton saveButton = new JButton("Save");
         saveButton.setFont(new Font("Arial", Font.BOLD, 14));
@@ -173,7 +177,7 @@ public class GameSettings extends JFrame {
                 Planewar.reinitializeComponents(Planewar.mainFrame);
 
                 dispose();
-                Planewar.open = SoundUtil.playSoundWithVolume("sounds/rick.wav", true, Planewar.volume); //close open music
+                Planewar.open = SoundUtil.playSoundWithVolume(GameUtil.rickMusic, true, Planewar.volume); //close open music
             }
         });
 
@@ -183,12 +187,12 @@ public class GameSettings extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Close the settings window without saving
                 dispose();
-                Planewar.open = SoundUtil.playSoundWithVolume("sounds/rick.wav", true, Planewar.volume); //close open music
+                Planewar.open = SoundUtil.playSoundWithVolume(GameUtil.rickMusic, true, Planewar.volume); //close open music
             }
         });
 
         // Initialize the clip and add a change listener to the slider
-        initClip("sounds//testsound.wav");
+        initClip(GameUtil.testSound);
         volumeSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {

@@ -29,6 +29,7 @@ public class Planewar extends JFrame {
     // Gaming screen size
     public static int width = 1000;
     public static int height = 1000;
+    public static String widowSize = "1000x1000";
 
     // Gaming stage control
     public static Planewar.GameState currentState = GameState.INITIAL;
@@ -38,7 +39,8 @@ public class Planewar extends JFrame {
 
     // gameLevel determine how many boss player defeat
     public static int gameLevel = 0;
-    public static float volume = 0.8f; 
+    public static float volume = 0.8f;
+
 
     /* Because bossObj is non static object
      * Use static bossAlive to record boss is alive or not
@@ -46,8 +48,11 @@ public class Planewar extends JFrame {
     public static boolean bossAlive = false;
 
     // Init background music is normal background music
-    public static String backGroundMusic = "sounds/backGroundMusic.wav";
-    public static String Dfficulty = "Midium";
+    public static String backGroundMusic = GameUtil.backGroundMusic;
+    public static String Dfficulty = "Medium";
+
+    //Init window title
+    public static String title = "Airplane Battle";
 
     public static int bossSpeed = 5;
     public static int bulletSpeed = 5;
@@ -94,16 +99,16 @@ public class Planewar extends JFrame {
      * Provide setting option before starting the game
      */
     public void launch() {
-        open = SoundUtil.playSoundWithVolume("sounds/rick.wav", true, volume);
+        open = SoundUtil.playSoundWithVolume(GameUtil.rickMusic, true, volume);
 
         this.setVisible(true);
         this.setSize(width, height);
         this.setLocationRelativeTo(null);
-        this.setTitle("Airplane Battle");
+        this.setTitle(title);
         this.setDefaultCloseOperation(3);
 
         this.setLayout(null);
-        startButton = new JButton(new ImageIcon("imgs/start_button.png"));
+        startButton = new JButton(new ImageIcon(GameUtil.startButton));
         startButton.setBounds(width/2-90, height/3+20, 200, 100);
         startButton.setContentAreaFilled(false);
         this.add(startButton);
@@ -120,7 +125,7 @@ public class Planewar extends JFrame {
             }
         });
 
-        settingButton = new JButton(new ImageIcon("imgs/setting_button.png"));
+        settingButton = new JButton(new ImageIcon(GameUtil.settingButton));
         settingButton.setBounds(width/2-90, height/3+130, 200, 100);
         settingButton.setUI(new BasicButtonUI());
         this.add(settingButton);
@@ -185,7 +190,7 @@ public class Planewar extends JFrame {
                      * Play normal background music
                      */
                     SoundUtil.stopSound(backgroundClip);
-                    backgroundClip = SoundUtil.playSoundWithVolume("sounds/backgroundMusic.wav", true, volume);
+                    backgroundClip = SoundUtil.playSoundWithVolume(GameUtil.backGroundMusic, true, volume);
                     bossMusicPlaying = false;
                 }
            } else {
@@ -225,11 +230,11 @@ public class Planewar extends JFrame {
             SoundUtil.stopSound(backgroundClip);
             SoundUtil.stopSound(homestart);
             gImage.drawImage(GameUtil.explodeImag, planeObj.getX() - 60, planeObj.getY() - 90, null);
-            lose = SoundUtil.playSoundWithVolume("sounds/lose.wav", false, volume);
+            lose = SoundUtil.playSoundWithVolume(GameUtil.loseSound, false, volume);
             GameUtil.drawWord(gImage, "GAME OVER", Color.RED, 50, width/2-150, height/3);
 
             if (retryButton == null) {
-                retryButton = new JButton(new ImageIcon("imgs\\retry_button.png"));
+                retryButton = new JButton(new ImageIcon(GameUtil.retryButton));
                 retryButton.setBounds( width/2-90, height/3+20, 174, 68);
                 retryButton.setUI(new BasicButtonUI());
 
@@ -245,7 +250,7 @@ public class Planewar extends JFrame {
 
 
             if (homeButton == null) {
-                homeButton = new JButton(new ImageIcon("imgs\\home_button.png"));
+                homeButton = new JButton(new ImageIcon(GameUtil.homeButoon));
                 homeButton.setBounds( width/2-90, height/3+100, 174, 68);
                 homeButton.setUI(new BasicButtonUI());
 
@@ -262,7 +267,7 @@ public class Planewar extends JFrame {
         }
         if (currentState == GameState.VICTORY) {
             // gImage.drawImage(GameUtil.explodeImag, bossObj.getX() - 30, bossObj.getY() - 40, null);
-            win = SoundUtil.playSoundWithVolume("sounds/100score.wav", false, volume);
+            win = SoundUtil.playSoundWithVolume(GameUtil.score100Sound, false, volume);
             GameUtil.drawWord(gImage, "YOU WON", Color.GREEN, 50, width/2-125, height/3);
         }
         if (currentState == GameState.GAMING || currentState == GameState.VICTORY || currentState == GameState.GAMEOVER) {
@@ -276,7 +281,7 @@ public class Planewar extends JFrame {
         if (count % shellProductivity == 0) {
             GameUtil.shellObjList.add(new ShellObj(GameUtil.shellImag, planeObj.getX() + 3, planeObj.getY() - 16, 14, 29, shellSpeed, this));
             GameUtil.gameObjList.add(GameUtil.shellObjList.get(GameUtil.shellObjList.size() - 1));
-            SoundUtil.playSoundWithVolume("sounds/plane_shoot1.wav", false, volume*0.95f);
+            SoundUtil.playSoundWithVolume(GameUtil.planeShootSound, false, volume*0.95f);
         }
         if (count % enemyProductivity == 0) {
             GameUtil.enemyObjList.add(new EnemyObj(GameUtil.enemyImag, (int) (Math.random() * (width/50)) * 50, 0, 49, 36, enemySpeed, this));
@@ -294,7 +299,7 @@ public class Planewar extends JFrame {
             gameLevel++;
             bossAlive = true;
             bossObj = new BossObj(GameUtil.bossRickImag, width/2, 20, 176, 155, bossSpeed, gameLevel, this);
-            backGroundMusic = "sounds/rick.wav";
+            backGroundMusic = GameUtil.rickMusic;
             GameUtil.gameObjList.add(bossObj);
         }
 
@@ -302,7 +307,7 @@ public class Planewar extends JFrame {
             gameLevel++;
             bossAlive = true;
             bossObj = new BossObj(GameUtil.bossTrumpImag, width/2, 20, 206, 217, bossSpeed, gameLevel, this);
-            backGroundMusic = "sounds/shootingStar.wav";
+            backGroundMusic = GameUtil.shootingStarSound;
             GameUtil.gameObjList.add(bossObj);
         }
     }
@@ -336,7 +341,7 @@ public class Planewar extends JFrame {
         retryButton = null;
         homeButton.setVisible(false);
         homeButton = null;
-        backgroundClip = SoundUtil.playSoundWithVolume("sounds\\backgroundMusic.wav", true, volume);
+        backgroundClip = SoundUtil.playSoundWithVolume(GameUtil.backGroundMusic, true, volume);
     }
 
     private void resetGameToInitialState() {
@@ -376,12 +381,12 @@ public class Planewar extends JFrame {
         }
 
         initializeButtons();
-        open = SoundUtil.playSoundWithVolume("sounds/rick.wav", true, volume);
+        open = SoundUtil.playSoundWithVolume(GameUtil.rickMusic, true, volume);
     }
 
 
     private void initializeButtons() {
-        startButton = new JButton(new ImageIcon("imgs/start_button.png"));
+        startButton = new JButton(new ImageIcon(GameUtil.startButton));
         startButton.setBounds(width/2-90, height/3+20, 200, 100);
         startButton.setContentAreaFilled(false);
         this.add(startButton);
@@ -394,12 +399,12 @@ public class Planewar extends JFrame {
                 settingButton.setVisible(false);
                 startButton = null;
                 settingButton = null;
-                homestart = SoundUtil.playSoundWithVolume("sounds/backgroundMusic.wav", true, volume);
+                homestart = SoundUtil.playSoundWithVolume(GameUtil.backGroundMusic, true, volume);
                 repaint();
             }
         });
 
-        settingButton = new JButton(new ImageIcon("imgs/setting_button.png"));
+        settingButton = new JButton(new ImageIcon(GameUtil.settingButton));
         settingButton.setBounds(width/2-90, height/3+130, 200, 100);
         settingButton.setUI(new BasicButtonUI());
         this.add(settingButton);
