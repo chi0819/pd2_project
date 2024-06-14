@@ -6,12 +6,14 @@ import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
 import javax.swing.ImageIcon;
 
 import java.util.List;
 import java.util.ArrayList;
 
 public class GameUtil {
+  
     public static Image bgImag = Toolkit.getDefaultToolkit().getImage("imgs/bgImag.jpg");
     public static Image bossRickImag = Toolkit.getDefaultToolkit().getImage("imgs/rick.png");
     public static Image bossTrumpImag = Toolkit.getDefaultToolkit().getImage("imgs/trump.png");

@@ -25,5 +25,4 @@ public class BgObj extends GameObj {
             y = -435;
         }
     }
-
 }

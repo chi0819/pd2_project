@@ -22,6 +22,7 @@ public class EnemyObj extends GameObj {
     public void paintSelf(Graphics gImage) {
         super.paintSelf(gImage);
         y += speed;
+
         if (this.getRec().intersects(this.frame.planeObj.getRec())) {
             Planewar.currentState = Planewar.GameState.GAMEOVER;
             SoundUtil.playSoundWithVolume(GameUtil.planeExplodeSound, false, Planewar.volume);

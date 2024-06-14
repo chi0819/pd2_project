@@ -98,7 +98,7 @@ public class GameObj {
     public void paintSelf (Graphics gImage) {
         gImage.drawImage(img, x, y,null);
     } 
-    
+
     public Rectangle getRec() {
         return new Rectangle(x,y,width,height);
     }

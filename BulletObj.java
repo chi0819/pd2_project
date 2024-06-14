@@ -13,12 +13,11 @@ public class BulletObj extends GameObj {
     public BulletObj(Image img,int x,int y,int width,int height,double speed,Planewar frame) {
         super(img,x,y,width,height,speed,frame);
     }
-    
+  
     @Override
     public void paintSelf(Graphics gImage) {
         super.paintSelf(gImage);
         y += speed;
-
         if (y > Planewar.height) {
             this.x = -300; //this coordinate can't be the same as "shell" and "enemy" (or it'll collide)
             this.y = 300;

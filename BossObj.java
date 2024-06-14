@@ -29,7 +29,6 @@ public class BossObj extends GameObj {
         }
         x += speed;
         for (ShellObj shellObj : GameUtil.shellObjList) {
-
             if (this.getRec().intersects(shellObj.getRec())) {
                 shellObj.setX(-100);
                 shellObj.setY(100);
@@ -48,7 +47,7 @@ public class BossObj extends GameObj {
         gImage.setColor(Color.red);
         gImage.fillRect(20,40,(life*(100))/basiclife,10);
     }
-    
+  
     public Rectangle getRec() {
         return new Rectangle(x,y,width,height);
     }

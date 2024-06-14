@@ -7,7 +7,7 @@
 ## 分工紀錄
 |成員|分工內容|
 |:--|:--|
-|林子齊|多樣化武器系統<br>遊戲彩蛋<br>遊戲結束動畫和回到大廳的流程|
+|林子齊|多樣化武器系統<br>不同等級的遊戲魔王<br>撰寫 Appendix 和註解|
 |劉承祐||
 |楊柏恩|遊戲大廳和操作設定<br>開始遊戲的流程<br>武器和爆炸音效|
 |廖竑羿|PvP模式|
@@ -80,7 +80,6 @@
 - 子彈圖片方向
 - 勝負判斷及畫面
 
-
 # Appendix
 
 ## Sounds
@@ -121,4 +120,3 @@ https://drive.google.com/drive/folders/1zjGFyvsrUDqzNFvgbRj6ktaB3DS74_zv?usp=sha
 #### Functions
 - `public static Clip playSound ( String soundFile, boolean loop )` : 播放音頻檔案
 - `public static void stopSound ( Clip clip )` : 暫停音頻播放
-

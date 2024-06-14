@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
 import javax.swing.ImageIcon;
 
 import java.awt.event.MouseEvent;
@@ -17,7 +18,7 @@ public class PlaneObj extends GameObj{
     public Image getImage() {
         return super.getImage();
     }
-    
+
     public PlaneObj() {
         super();
     }

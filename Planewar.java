@@ -30,7 +30,7 @@ public class Planewar extends JFrame {
     public static int width = 1000;
     public static int height = 1000;
     public static String widowSize = "1000x1000";
-
+  
     // Gaming stage control
     public static Planewar.GameState currentState = GameState.INITIAL;
 
@@ -40,7 +40,6 @@ public class Planewar extends JFrame {
     // gameLevel determine how many boss player defeat
     public static int gameLevel = 0;
     public static float volume = 0.8f;
-
 
     /* Because bossObj is non static object
      * Use static bossAlive to record boss is alive or not
@@ -73,7 +72,7 @@ public class Planewar extends JFrame {
     int enemyCount = 0;
 
     Image offScreenImage = null;
-     BgObj backGround = new BgObj(GameUtil.bgImag, 0, -435, 2);
+    BgObj backGround = new BgObj(GameUtil.bgImag, 0, -435, 2);
 
     // Init player's plane object and bossObj
     public PlaneObj planeObj = new PlaneObj(GameUtil.planeImag, width/2+10, height/3+80, 20, 30, 0, this);
@@ -224,12 +223,14 @@ public class Planewar extends JFrame {
             gImage.drawImage(GameUtil.bossTrumpImag, (width*9)/13, height/9, this);
             gImage.drawImage(GameUtil.explodeImag, width/2-70, height/6, this);
         }
+
         if (currentState == GameState.GAMING) {
             for (int i = 0; i < GameUtil.gameObjList.size(); i++) {
                 GameUtil.gameObjList.get(i).paintSelf(gImage);
             }
             GameUtil.gameObjList.removeAll(GameUtil.removeList);
         }
+
         if (currentState == GameState.GAMEOVER) {
             SoundUtil.stopSound(backgroundClip);
             SoundUtil.stopSound(homestart);
@@ -251,7 +252,6 @@ public class Planewar extends JFrame {
                 this.add(retryButton);
             }
             retryButton.setVisible(true);
-
 
             if (homeButton == null) {
                 homeButton = new JButton(new ImageIcon(GameUtil.homeButoon));
