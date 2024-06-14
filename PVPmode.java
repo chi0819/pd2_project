@@ -1,11 +1,14 @@
+import java.io.*;
+
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
+
 import java.awt.*;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.*;
-import java.util.ArrayList;
+import java.awt.event.KeyAdapter;
+
 import java.util.List;
+import java.util.ArrayList;
 
 public class PVPmode extends Planewar {
     static int width = 600;

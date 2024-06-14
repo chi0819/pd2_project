@@ -1,13 +1,13 @@
+import java.awt.Font;
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.Rectangle;
-import javax.swing.ImageIcon;
-
 import java.awt.Graphics;
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.JPanel;
+import java.awt.Rectangle;
+
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.ImageIcon;
 
 public class BossObj extends GameObj {
     public static int basiclife = 10;
