@@ -1,26 +1,25 @@
-import java.io.*;
-
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicButtonUI;
-
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
-
-import java.util.List;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PVPmode extends Planewar {
     static int width = 600;
     static int height = 600;
+    int count = 0;
     public static int state = 0;
-
-    int count = 0; 
+    /*
+     * 0 : initial
+     * 1 : fight
+     * 4 : game over
+     */
 
     Image offScreenImage = null;
     BgObj backGround = new BgObj(GameUtil.bgImag, 0, -435, 2);
-    PlayerPlaneObj player1; 
-    PlayerPlaneObj player2;
+    PlayerPlaneObj player1; // control : WASD
+    PlayerPlaneObj player2; // control : up,down,left,right
 
     List<GameObj> gameObjList = new ArrayList<>();
     List<GameObj> removeList = new ArrayList<>();
@@ -41,6 +40,7 @@ public class PVPmode extends Planewar {
         player1 = new PlayerPlaneObj(GameUtil.planeImag, 100, 100, 50, 50, 10, this, 100, 1);
         player2 = new PlayerPlaneObj(GameUtil.planeImag, 100, 400, 50, 50, 10, this, 100, 2);
 
+        // init
         if (gameObjList == null) {
             gameObjList = new ArrayList<>();
         }
@@ -48,6 +48,7 @@ public class PVPmode extends Planewar {
         gameObjList.add(player1);
         gameObjList.add(player2);
 
+        // key status
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -115,6 +116,16 @@ public class PVPmode extends Planewar {
             GameUtil.gameObjList.removeAll(GameUtil.removeList);
             gameObjList.removeAll(GameUtil.removeList);
         }
+        // end game
+        if (state == 4) {
+            gImage.setColor(Color.WHITE);
+            gImage.setFont(new Font("Arial", Font.BOLD, 30));
+            if (player1.getHealth() <= 0) {
+                gImage.drawString("Player 2 Wins!", width / 2 - 150, height / 2);
+            } else if (player2.getHealth() <= 0) {
+                gImage.drawString("Player 1 Wins!", width / 2 - 150, height / 2);
+            }
+        }
 
         gImage.setColor(Color.RED);
         gImage.drawString("Player 1 Health: " + player1.getHealth(), 50, 50);
@@ -130,6 +141,7 @@ public class PVPmode extends Planewar {
             createBullet(player1);
             createBullet(player2);
         }
+
     }
 
     public void createBullet(PlayerPlaneObj player) {
@@ -163,10 +175,14 @@ public class PVPmode extends Planewar {
                 GameUtil.removeList.add(shell);
             }
         }
-        
+        // remove bullets
         gameObjList.removeAll(removeList);
         GameUtil.shellObjList.removeAll(removeList);
         removeList.clear();
+
+        if (player1.getHealth() <= 0 || player2.getHealth() <= 0) {
+            state = 4;
+        }
     }
 
 }

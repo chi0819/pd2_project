@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 
 class PlayerPlaneObj extends GameObj {
@@ -29,6 +28,7 @@ class PlayerPlaneObj extends GameObj {
         Graphics2D g2d = (Graphics2D) gImage;
         AffineTransform old = g2d.getTransform();
 
+        // rotate
         if (this.id == 1) {
             g2d.rotate(Math.toRadians(180), x + width / 2, y + height / 2);
         }

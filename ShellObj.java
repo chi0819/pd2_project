@@ -1,13 +1,8 @@
-import java.awt.Font;
-import java.awt.Color;
 import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.Graphics;
 import java.awt.Rectangle;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.ImageIcon;
+import java.awt.geom.AffineTransform;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class ShellObj extends GameObj {
     public int playerId;
@@ -31,9 +26,17 @@ public class ShellObj extends GameObj {
     }
 
     public void paintSelf(Graphics gImage) {
-        super.paintSelf(gImage);
+        Graphics2D g2d = (Graphics2D) gImage;
+        AffineTransform old = g2d.getTransform();
+
+        // rotate
+        if (this.playerId == 1) {
+            g2d.rotate(Math.toRadians(180), x + width / 2, y + height / 2);
+        }
+        g2d.drawImage(img, x, y, null);
+
+        g2d.setTransform(old);
         y -= speed;
-        // If shell out of screen, remove it
         if (y < 0 || y > PVPmode.height) { // out of the frame
             this.x = -100;
             this.y = 100;
