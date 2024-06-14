@@ -92,7 +92,6 @@ public class Planewar extends JFrame {
     static Clip lose = null;
     static Clip win = null;
     static Clip open = null; //openning music
-    //static Clip homestart = null;
     static Clip explode = null;
 
     /* This function init Game screen parameter
