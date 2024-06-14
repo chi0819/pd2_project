@@ -92,7 +92,8 @@ public class Planewar extends JFrame {
     static Clip lose = null;
     static Clip win = null;
     static Clip open = null; //openning music
-    static Clip homestart = null;
+    //static Clip homestart = null;
+    static Clip explode = null;
 
     /* This function init Game screen parameter
      * Provide setting option before starting the game
@@ -157,9 +158,11 @@ public class Planewar extends JFrame {
                 if (e.getKeyCode() == 32 || e.getKeyCode() == 49 || e.getKeyCode() == 62) {
                     switch (currentState) {
                         case GAMING:
+                            backgroundClip.stop();
                             currentState = GameState.PAUSE;
                             break;
                         case PAUSE:
+                            backgroundClip.start();
                             currentState = GameState.GAMING;
                             break;
                         default:
@@ -233,7 +236,7 @@ public class Planewar extends JFrame {
 
         if (currentState == GameState.GAMEOVER) {
             SoundUtil.stopSound(backgroundClip);
-            SoundUtil.stopSound(homestart);
+            //SoundUtil.stopSound(homestart);
             gImage.drawImage(GameUtil.explodeImag, planeObj.getX() - 60, planeObj.getY() - 90, null);
             lose = SoundUtil.playSoundWithVolume(GameUtil.loseSound, false, volume);
             GameUtil.drawWord(gImage, "GAME OVER", Color.RED, 50, width/2-150, height/3);
@@ -299,7 +302,7 @@ public class Planewar extends JFrame {
 
         // Control Game Level and Boss Type 
         if(gameLevel == 0 && score > 10 && bossObj == null) {
-            SoundUtil.stopSound(homestart);
+            //SoundUtil.stopSound(homestart);
             gameLevel++;
             bossAlive = true;
             bossObj = new BossObj(GameUtil.bossRickImag, width/2, 20, 176, 155, bossSpeed, gameLevel, this);
@@ -318,6 +321,7 @@ public class Planewar extends JFrame {
 
     private void restartGameAfterGameOver() {
         SoundUtil.stopSound(lose);
+        SoundUtil.stopSound(explode);
 
         GameUtil.gameObjList.clear();
         GameUtil.bulletObjList.clear();
@@ -351,6 +355,7 @@ public class Planewar extends JFrame {
     private void resetGameToInitialState() {
         SoundUtil.stopSound(win);
         SoundUtil.stopSound(lose);
+        SoundUtil.stopSound(explode);
 
         currentState = GameState.INITIAL;
         score = 0;
@@ -403,7 +408,7 @@ public class Planewar extends JFrame {
                 settingButton.setVisible(false);
                 startButton = null;
                 settingButton = null;
-                homestart = SoundUtil.playSoundWithVolume(GameUtil.backGroundMusic, true, volume);
+                backgroundClip = SoundUtil.playSoundWithVolume(GameUtil.backGroundMusic, true, volume);
                 repaint();
             }
         });
