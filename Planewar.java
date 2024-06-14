@@ -14,6 +14,7 @@ import java.io.File;
 
 public class Planewar extends JFrame {
 
+    // GameState store enum for gaming flow control
     public enum GameState {
         INITIAL,
         GAMING,
@@ -22,14 +23,27 @@ public class Planewar extends JFrame {
         VICTORY    
     }
 
+    // Gaming screen size
     public static int width = 1000;
     public static int height = 1000;
+
+    // Gaming stage control
     public static Planewar.GameState currentState = GameState.INITIAL;
+
+    // Player score
     public static int score = 0;
+
+    // gameLevel determine how many boss player defeat
     public static int gameLevel = 0;
     public static float volume = 0.8f; 
+
+    /* Because bossObj is non static object
+     * Use static bossAlive to record boss is alive or not
+     */
     public static boolean bossAlive = false;
-    public static String backGroundMusic = "sounds/backgroundMusic.wav";
+
+    // Init background music is normal background music
+    public static String backGroundMusic = "sounds/backGroundMusic.wav";
     public static String Dfficulty = "Midium";
 
     public static int bossSpeed = 5;
@@ -42,19 +56,30 @@ public class Planewar extends JFrame {
 
     static Planewar mainFrame; //argument used to set window size
 
-    int count = 1; //count*25ms
+    /*
+     * Time counter
+     * When time pass 25ms
+     * Player's plane shoot one bullet and add one enemy to the screen
+     */
+    int count = 1;
     int enemyCount = 0;
 
     Image offScreenImage = null;
      BgObj backGround = new BgObj(GameUtil.bgImag, 0, -435, 2);
+
+    // Init player's plane object and bossObj
     public PlaneObj planeObj = new PlaneObj(GameUtil.planeImag, width/2+10, height/3+80, 20, 30, 0, this);
     public BossObj bossObj = null;
 
+    // Button before gaming
     JButton startButton;
     JButton settingButton;
+
+    // Button when game over
     static JButton retryButton;
     static JButton homeButton;
 
+    // Clip store background music information
     boolean bossMusicPlaying = true;
     static Clip backgroundClip = null;
     static Clip lose = null;
@@ -62,6 +87,9 @@ public class Planewar extends JFrame {
     static Clip open = null; //openning music
     static Clip homestart = null;
 
+    /* This function init Game screen parameter
+     * Provide setting option before starting the game
+     */
     public void launch() {
         open = SoundUtil.playSoundWithVolume("sounds/rick.wav", true, volume);
 
@@ -106,13 +134,20 @@ public class Planewar extends JFrame {
             }
         }); 
         
+        // Add basic objects to game screen
         GameUtil.gameObjList.add(backGround);
         GameUtil.gameObjList.add(planeObj);
 
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == 32) {
+                /*
+                 * use getKeyCode() to detect keyboard input
+                 * For Windows, the spacebar keyCode is 32
+                 * For MacOS, the spacebar keyCode is 49
+                 * For Linux distro, the spacebar keyCode is 62
+                 */
+                if (e.getKeyCode() == 32 || e.getKeyCode() == 49 || e.getKeyCode() == 62) {
                     switch (currentState) {
                         case GAMING:
                             currentState = GameState.PAUSE;
@@ -132,15 +167,26 @@ public class Planewar extends JFrame {
                 repaint();
                 if(!bossAlive) bossObj = null;
                 if(bossObj != null && !bossMusicPlaying) {
+                    /*
+                     * When boss appear
+                     * Stop normal background music
+                     * Play background music for specific boss
+                     */
                     SoundUtil.stopSound(backgroundClip);
                     backgroundClip = SoundUtil.playSoundWithVolume(backGroundMusic, true, volume);
                     bossMusicPlaying = true;
                 } else if(bossObj == null && bossMusicPlaying) {
+                    /*
+                     * When there is no boss
+                     * Stop previouse boss background music
+                     * Play normal background music
+                     */
                     SoundUtil.stopSound(backgroundClip);
                     backgroundClip = SoundUtil.playSoundWithVolume("sounds/backgroundMusic.wav", true, volume);
                     bossMusicPlaying = false;
                 }
            } else {
+                // If GameOver stop background music
                 SoundUtil.stopSound(backgroundClip);
             }
             try {
@@ -153,6 +199,8 @@ public class Planewar extends JFrame {
 
     @Override
     public void paint(Graphics g) {
+
+        // Create gaming screen border
         if (offScreenImage == null) {
             offScreenImage = createImage(width, height);
         }
