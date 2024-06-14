@@ -1,18 +1,14 @@
+import java.awt.Font;
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.Rectangle;
 import java.awt.Graphics;
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.Rectangle;
 
-import javax.swing.JPanel;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.ImageIcon;
 
-/*
- * Implement all attributes use in Object on screen
- * Includes : BossObj, BulletObj, EnemyObj, PlaneObj
- */
 public class GameObj {
     Image img;
     int x;
@@ -102,6 +98,7 @@ public class GameObj {
     public void paintSelf (Graphics gImage) {
         gImage.drawImage(img, x, y,null);
     } 
+
     public Rectangle getRec() {
         return new Rectangle(x,y,width,height);
     }
