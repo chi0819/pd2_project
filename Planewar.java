@@ -168,6 +168,10 @@ public class Planewar extends JFrame {
                 }
             }
         });
+        
+        // Set focus on KeyListener after using JButton
+        this.setFocusable(true);
+        this.requestFocusInWindow();
 
         while (true) {
             if (currentState == GameState.GAMING) {

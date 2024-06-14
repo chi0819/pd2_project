@@ -11,7 +11,6 @@ import javax.swing.event.ChangeListener;
 
 import javax.sound.sampled.*;
 
-
 public class GameSettings extends JFrame {
 
     private Clip clip;
