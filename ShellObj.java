@@ -37,7 +37,7 @@ public class ShellObj extends GameObj {
 
         g2d.setTransform(old);
         y -= speed;
-        if (y < 0 || y > PVPmode.height) { // out of the frame
+        if (y < 0 || y > Planewar.height) { // out of the frame
             this.x = -100;
             this.y = 100;
             GameUtil.removeList.add(this);

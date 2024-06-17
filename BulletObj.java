@@ -26,7 +26,7 @@ public class BulletObj extends GameObj {
 
         if (/*this.frame.bossObj != null &&*/ this.getRec().intersects(this.frame.planeObj.getRec())) {
             Planewar.currentState = Planewar.GameState.GAMEOVER;
-            SoundUtil.playSoundWithVolume(GameUtil.planeExplodeSound, false, Planewar.volume);
+            Planewar.explode = SoundUtil.playSoundWithVolume(GameUtil.planeExplodeSound, false, Planewar.volume);
         }
     }
 
