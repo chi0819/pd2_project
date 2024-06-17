@@ -1,19 +1,18 @@
-import java.io.File;
-
-import javax.sound.sampled.*;
-
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentAdapter;
+
+import javax.sound.sampled.Clip;
 
 public class Planewar extends JFrame {
 

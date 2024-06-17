@@ -7,7 +7,7 @@
 ## 分工紀錄
 |成員|分工內容|
 |:--|:--|
-|林子齊|多樣化武器系統<br>不同等級的遊戲魔王<br>撰寫 Appendix 和註解|
+|林子齊|不同等級的遊戲魔王<br>遊戲音效（爆炸和魔王背景音效等）<br>撰寫 Appendix 和註解<br>教同學用 Git 和 GitHub<br>Debug PR and merge<br>調整 code style|
 |劉承祐|遊戲設定實作<br>retry跟home鍵實作<br>參數彈性化|
 |楊柏恩|遊戲大廳和操作設定<br>開始遊戲的流程<br>武器和爆炸音效|
 |廖竑羿|PvP模式|
@@ -21,7 +21,18 @@
 2024/6/11<br>
 完成:
 - 添加程式碼註解
-- 添加音效
+- 添加音效 (飛機爆炸和不同遊戲情景的音效)
+
+2024/6/14<br>
+完成:
+- 每個 branch 的 code review 和 final merge debug
+- 撰寫 Appendix
+
+2024/6/18<br>
+完成:
+- Add LICENSE
+- Remove redundant import ( bad habit about import * )
+- Modified code style
 
 ## 劉承祐開發紀錄
 2024/6/9<br>

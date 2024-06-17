@@ -4,16 +4,12 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Graphics;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import javax.swing.ImageIcon;
-
 import java.util.List;
 import java.util.ArrayList;
 
 public class GameUtil {
   
+    // Declare images used in Planewar.java
     public static Image bgImag = Toolkit.getDefaultToolkit().getImage("imgs/bgImag.jpg");
     public static Image bossRickImag = Toolkit.getDefaultToolkit().getImage("imgs/rick.png");
     public static Image bossTrumpImag = Toolkit.getDefaultToolkit().getImage("imgs/trump.png");
@@ -27,6 +23,7 @@ public class GameUtil {
     public static Image retryButton = Toolkit.getDefaultToolkit().getImage("imgs/retry_button.png");
     public static Image homeButoon = Toolkit.getDefaultToolkit().getImage("imgs/home_button.png");
 
+    // Declare sounds path used in Planewar.java
     public static String backGroundMusic = "sounds/backgroundMusic.wav";
     public static String rickMusic = "sounds/rick.wav";
     public static String loseSound = "sounds/lose.wav";
@@ -37,10 +34,13 @@ public class GameUtil {
     public static String enemyExplodeSound = "sounds/enemy_explode.wav";
     public static String testSound = "sounds//testsound.wav";
 
+    // ArrayLists store all object ( player's plane, enemy, Boss, bullet )
     public static List<GameObj> gameObjList = new ArrayList<>();
     public static List<ShellObj> shellObjList = new ArrayList<>();
     public static List<EnemyObj> enemyObjList = new ArrayList<>();
     public static List<BulletObj> bulletObjList = new ArrayList<>();
+
+    // If some object eliminated, the object will put into removeList, then remove from screen
     public static List<GameObj> removeList = new ArrayList<>();
 
     public static void drawWord (Graphics gImage,String str,Color color,int size,int x,int y) {

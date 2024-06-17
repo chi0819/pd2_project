@@ -1,12 +1,5 @@
-import java.awt.Font;
-import java.awt.Color;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.Graphics;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.ImageIcon;
 
 public class BgObj extends GameObj {
     public BgObj() {
@@ -17,6 +10,7 @@ public class BgObj extends GameObj {
         super(img,x,y,speed);
     }
    
+    // Make background image like animation
     @Override
     public void paintSelf(Graphics gImage) {
         super.paintSelf(gImage);
