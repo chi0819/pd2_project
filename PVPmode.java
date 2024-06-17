@@ -1,10 +1,15 @@
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 
 import java.util.List;
 import java.util.ArrayList;
+
+import javax.swing.JFrame;
 
 public class PVPmode extends Planewar {
     static int width = 600;

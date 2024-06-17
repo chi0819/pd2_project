@@ -232,7 +232,7 @@ public class Planewar extends JFrame {
             GameUtil.gameObjList.removeAll(GameUtil.removeList);
         }
 
-        if (currentState == GameState.GAMEOVER) {
+        if (currentState == GameState.GAMEOVER || currentState == GameState.VICTORY) {
             SoundUtil.stopSound(backgroundClip);
             //SoundUtil.stopSound(homestart);
             gImage.drawImage(GameUtil.explodeImag, planeObj.getX() - 60, planeObj.getY() - 90, null);
