@@ -28,7 +28,7 @@ public class Planewar extends JFrame {
     // Gaming screen size
     public static int width = 1000;
     public static int height = 1000;
-    public static String widowSize = "1000x1000";
+    public static String windowSize = "1000x1000";
   
     // Gaming stage control
     public static Planewar.GameState currentState = GameState.INITIAL;
