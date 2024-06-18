@@ -1,621 +1,481 @@
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicButtonUI;
-import javax.sound.sampled.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.io.*;
 
-/*create a class that set dialog
-* Variable Declaration: 
-* VolumeSlider for adjusting volume
-* Width/height Field for adjusting the size of frame
-*
-* Directions: 
-* Once the 'apply' button is clicked, this class will instantly change the value of relative parameters in PlaneWar.
-* This dialog will automatically show the current value of relative parameters.
-* You can check terminal to see if the setting function works.
-*/
-class SettingsDialog extends JDialog {
-    private JSlider volumeSlider;
-    private JTextField widthField;
-    private JTextField heightField;
-    private JButton applyButton;
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-    public SettingsDialog(JFrame parent, int currentWidth, int currentHeight, int currentVolume) {
-        super(parent, "Settings", true);
-        setLayout(new GridLayout(4, 2));
+import javax.sound.sampled.Clip;
 
-        add(new JLabel("Volume:"));
-        volumeSlider = new JSlider(0, 100, currentVolume);
-        add(volumeSlider);
+public class Planewar extends JFrame {
 
-        add(new JLabel("Window Width:"));
-        widthField = new JTextField(String.valueOf(currentWidth));
-        add(widthField);
-
-        add(new JLabel("Window Height:"));
-        heightField = new JTextField(String.valueOf(currentHeight));
-        add(heightField);
-
-        applyButton = new JButton("Apply");
-        add(applyButton);
-
-        applyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int volume = volumeSlider.getValue();
-                int width = Integer.parseInt(widthField.getText());
-                int height = Integer.parseInt(heightField.getText());
-
-                System.out.println("Volume: " + volume);
-                System.out.println("Window Size: " + width + "x" + height);
-
-                parent.setSize(width, height);
-
-                Planewar.width = width;
-                Planewar.height = height;
-                Planewar.volume = volume;
-
-                SoundUtil.adjustVolume(Planewar.backgroundClip, volume);
-
-                dispose();
-            }
-        });
-
-        setSize(300, 200);
-        setLocationRelativeTo(parent);
-    }
-}
-
-/*create a class that play sounds
-* Variable Declaration: 
-* clip for tracing each sound that is playing
-* volumeControl for controling volume of each sound
-* 
-* Directions:
-* You can pass parameter 'soundFile' with path of sounds and parameter 'loop' for checking if this sound needs to play again and again.
-* For example, SoundUtil("music", true) means that "music" will be played repeatly.
-* Warning that playing a sound repeatly doesn't mean that a sound will be played before itself ends, which lead to needless resource occupation!
-* The 'playSound' function will adjust the volume of sounds before playing sounds, making sure that the setting of volume be recorded and reuse and will not play sounds at default volume each time.
-* 
-* You can use 'stopSound' function to stop sound that is playing, but you should declare a 'Clip' variable to save each clip of each sound.
-* 
-* Function 'adjustVolume' will only be called in setting dialog. 
-*/
-class SoundUtil {
-    private static Clip clip;
-    private static FloatControl volumeControl = null; // Added for volume control
-
-    public static Clip playSound(String soundFile, boolean loop) {
-        try {
-            File soundPath = new File(soundFile);
-            if (soundPath.exists()) {
-                AudioInputStream audioInput = AudioSystem.getAudioInputStream(soundPath);
-                clip = AudioSystem.getClip();
-                clip.open(audioInput);
-                volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN); // Get volume control
-                volumeControl.setValue((float) (Math.log(Planewar.volume / 100.0) / Math.log(10.0) * 20.0));
-                if (loop) {
-                    clip.loop(Clip.LOOP_CONTINUOUSLY);
-                }
-                clip.start();
-            } else {
-                System.out.println("Cannot find sound file: " + soundFile);
-            }
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
-        }
-        return clip;
+    // GameState store enum for gaming flow control
+    public enum GameState {
+        INITIAL,
+        GAMING,
+        PAUSE,
+        GAMEOVER,
+        VICTORY    
     }
 
-    public static void stopSound(Clip clip) {
-        if (clip != null && clip.isRunning()) {
-            clip.stop();
-            clip.close();
-        }
-    }
+    // Gaming screen size
+    public static int width = 1000;
+    public static int height = 1000;
+    public static String windowSize = "1000x1000";
+  
+    // Gaming stage control
+    public static Planewar.GameState currentState = GameState.INITIAL;
 
-    public static void adjustVolume(Clip clip, int volume) {
-        if (clip != null) {
-            volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            float dB = (float) (Math.log(volume / 100.0) / Math.log(10.0) * 20.0);
-            volumeControl.setValue(dB);
-        } else {
-            System.out.println("Volume control not initialized!");
-        }
-    }
-}
-
-class GameObj {
-    Image img;
-    int x;
-    int y;
-    int width;
-    int height;
-    double speed;
-    Planewar frame;
-
-    public Image getImage() {
-        return img;
-    }
-
-    public void setImage(Image img) {
-        this.img = img;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public Planewar getFrame() {
-        return frame;
-    }
-
-    public void setFrame(Planewar frame) {
-        this.frame = frame;
-    }
-
-    public GameObj() {
-
-    }
-    public GameObj(Image img, int x, int y, double speed) {
-        this.img = img;
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
-    }
-    public GameObj(Image img,int x,int y,int width,int height,double speed,Planewar frame) {
-        this.img = img;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.speed = speed;
-        this.frame = frame;
-    }
-
-    public void paintSelf (Graphics gImage) {
-        gImage.drawImage(img, x, y,null);
-    } 
-    public Rectangle getRec() {
-        return new Rectangle(x,y,width,height);
-    }
-}
-
-class GameUtil {
-    public static Image bgImag = Toolkit.getDefaultToolkit().getImage("imgs/bgImag.jpg");
-    public static Image bossImag = Toolkit.getDefaultToolkit().getImage("imgs/boss.png");
-    public static Image explodeImag = Toolkit.getDefaultToolkit().getImage("imgs/explode.png");
-    public static Image planeImag = Toolkit.getDefaultToolkit().getImage("imgs/plane.png");
-    public static Image shellImag = Toolkit.getDefaultToolkit().getImage("imgs/shell.png");
-    public static Image enemyImag = Toolkit.getDefaultToolkit().getImage("imgs/enemy.png");
-    public static Image bulletImag = Toolkit.getDefaultToolkit().getImage("imgs/bullet.png");
-    public static Image startButtonImage = Toolkit.getDefaultToolkit().getImage("imgs/start_button.png");
-    public static Image settingButtonImage = Toolkit.getDefaultToolkit().getImage("imgs/setting_button.png");
-    public static Image retryButtonImage = Toolkit.getDefaultToolkit().getImage("imgs/retry_button.png");
-
-    public static List<GameObj> gameObjList = new ArrayList<>();
-    public static List<ShellObj> shellObjList = new ArrayList<>();
-    public static List<EnemyObj> enemyObjList = new ArrayList<>();
-    public static List<BulletObj> bulletObjList = new ArrayList<>();
-    public static List<GameObj> removeList = new ArrayList<>();
-
-    public static void drawWord (Graphics gImage,String str,Color color,int size,int x,int y) {
-        gImage.setColor(color);
-        gImage.setFont(new Font("Arial",Font.BOLD,size));
-        gImage.drawString(str, x, y);
-    }
-}
-
-class BgObj extends GameObj {
-    public BgObj() {
-        super();
-    }
-    public BgObj(Image img, int x, int y, double speed) {
-        super(img,x,y,speed);
-    }
-
-    @Override
-    public void paintSelf(Graphics gImage) {
-        super.paintSelf(gImage);
-        y += speed;
-        if (y >= 0) {
-            y = -435;
-        }
-    }
-}
-
-class BossObj extends GameObj {
-    int life = 10;
-    public BossObj(Image img,int x,int y,int width,int height,double speed,Planewar frame) {
-        super(img,x,y,width,height,speed,frame);
-    }
-    @Override
-    public void paintSelf(Graphics gImage) {
-        super.paintSelf(gImage);
-        if (x > 550 || x < -50) {
-            speed = -speed;
-        }
-        x += speed;
-        for (ShellObj shellObj : GameUtil.shellObjList) {
-            if (this.getRec().intersects(shellObj.getRec())) {
-                shellObj.setX(-100);
-                shellObj.setY(100);
-                GameUtil.removeList.add(shellObj);
-                life--;
-            }
-            if (life <= 0) {
-                Planewar.state = 4;
-            }
-        }
-        gImage.setColor(Color.white);
-        gImage.fillRect(20,40,100,10);
-        gImage.setColor(Color.red);
-        gImage.fillRect(20,40,(life*100)/10,10);
-    }
-    public Rectangle getRec() {
-        return new Rectangle(x,y,width,height);
-    }
-}
-
-class BulletObj extends GameObj {
-    public BulletObj(Image img,int x,int y,int width,int height,double speed,Planewar frame) {
-        super(img,x,y,width,height,speed,frame);
-    }
-    @Override
-    public void paintSelf(Graphics gImage) {
-        super.paintSelf(gImage);
-        y += speed;
-        if (y > 600) {
-            this.x = -300; //this coordinate can't be the same as "shell" and "enemy" (or it'll collide)
-            this.y = 300;
-            GameUtil.removeList.add(this);
-        }
-        if (/*this.frame.bossObj != null &&*/ this.getRec().intersects(this.frame.planeObj.getRec())) {
-            Planewar.state = 3;
-            SoundUtil.playSound("sounds/plane_explode.wav",false);
-        }
-    }
-    public Rectangle getRec() {
-        return new Rectangle(x,y,width,height);
-    }
-}
-
-class EnemyObj extends GameObj {
-    public EnemyObj() {
-        super();
-    }
-    public EnemyObj(Image img,int x,int y,int width,int height,double speed,Planewar frame) {
-        super(img,x,y,width,height,speed,frame);
-    }
-    @Override
-    public void paintSelf(Graphics gImage) {
-        super.paintSelf(gImage);
-        y += speed;
-        if (this.getRec().intersects(this.frame.planeObj.getRec())) {
-            Planewar.state = 3;
-            SoundUtil.playSound("sounds/plane_explode.wav", false);
-        }
-        if (y > 600) {
-            this.x = -200;
-            this.y = 200;
-            GameUtil.removeList.add(this);
-        }
-        for (ShellObj shellObj : GameUtil.shellObjList) {
-            if (this.getRec().intersects(shellObj.getRec())) {
-                shellObj.setX(-100);
-                shellObj.setY(100);
-                this.x = -200;
-                this.y = 200;
-                GameUtil.removeList.add(shellObj);
-                GameUtil.removeList.add(this);
-                Planewar.score++;
-                SoundUtil.playSound("sounds/enemy_explode.wav", false);
-            }
-        }
-    }
-    public Rectangle getRec() {
-        return new Rectangle(x,y,width,height);
-    }
-}
-
-class PlaneObj extends GameObj{
-    @Override
-    public Image getImage() {
-        return super.getImage();
-    }
-    public PlaneObj() {
-        super();
-    }
-    public PlaneObj(Image img,int x,int y,int width,int height,double speed,Planewar frame) {
-        super(img,x,y,width,height,speed,frame);
-        this.frame.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved (MouseEvent e) {
-                PlaneObj.super.x = e.getX() - 11;
-                PlaneObj.super.y = e.getY() - 16;
-            }
-        });
-    }
-    @Override
-    public void paintSelf(Graphics gImage) {
-        super.paintSelf(gImage);
-        if (this.frame.bossObj != null && this.getRec().intersects(this.frame.bossObj.getRec())) {
-            Planewar.state = 3;
-        }
-    }
-    public Rectangle getRec() {
-        return new Rectangle(x,y,width,height);
-    }
-}
-
-class ShellObj extends GameObj{
-    @Override
-    public Image getImage() {
-        return super.getImage();
-    }
-    public ShellObj() {
-        super();
-    }
-    public ShellObj(Image img,int x,int y,int width,int height,double speed,Planewar frame) {
-        super(img,x,y,width,height,speed,frame);
-    }
-    public void paintSelf(Graphics gImage) {
-        super.paintSelf(gImage);
-        y -= speed;
-        if (y < 0) { //out of the frame
-            this.x = -100;
-            this.y = 100;
-            GameUtil.removeList.add(this);
-        }
-    }
-    public Rectangle getRec() {
-        return new Rectangle(x,y,width,height);
-    }
-}
-
-public class Planewar extends JFrame{
-    static int width = 600;
-    static int height = 600;
-    static int volume = 50;
-    public static int state = 0;
+    // Player score
     public static int score = 0;
+
+    // gameLevel determine how many boss player defeat
+    public static int gameLevel = 0;
+
+    // Init background music is normal background music
+    public static String backGroundMusic = GameUtil.backGroundMusic;
+
+    // Control background music volume
+    public static float volume = 0.8f;
+
+    /* Because bossObj is non static object
+     * Use static bossAlive to record boss is alive or not
+     */
+    public static boolean bossAlive = false;
+
+    // Setting before gaming
+    public static String Dfficulty = "Medium";
+
+    //Init window title
+    public static String title = "Airplane Battle";
+
+    public static int bossSpeed = 5;
+    public static int bulletSpeed = 5;
+    public static int enemySpeed = 5;
+    public static int shellSpeed = 5;
+
+    // The smaller the number is, the higher the bullet productivity is
+    public static int bulletProductivity = 15;
+    public static int enemyProductivity = 15;
+    public static int shellProductivity = 15;
+
+    //argument used to set window size
+    static Planewar mainFrame;
+
+    /*
+     * Time counter
+     * When time pass 25ms
+     * Player's plane shoot one bullet and add one enemy to the screen
+     */
     int count = 1;
     int enemyCount = 0;
-    boolean isBgMusicPlaying = false; //this variable is for tracing if BGM is playing
-    static Clip backgroundClip = null; //this variable is for saving clip of BGM
 
-    Image  offScreenImage  = null;
-    BgObj obj = new BgObj(GameUtil.bgImag,0,-435,2);
-    public PlaneObj planeObj = new PlaneObj(GameUtil.planeImag,290,550,20,30,0,this);
+    Image offScreenImage = null;
+    BgObj backGround = new BgObj(GameUtil.bgImag, 0, -435, 2);
+
+    // Init player's plane object and bossObj
+    public PlaneObj planeObj = new PlaneObj(GameUtil.planeImag, width/2+10, height/3+80, 20, 30, 0, this);
     public BossObj bossObj = null;
 
-    //declare three buttons
+    // Button before gaming
     JButton startButton;
     JButton settingButton;
-    JButton retryButton;
 
+    // Button when game over
+    static JButton retryButton;
+    static JButton homeButton;
+
+    // Clip store background music information
+    boolean bossMusicPlaying = true;
+    static Clip backgroundClip = null;
+    static Clip lose = null;
+    static Clip win = null;
+    static Clip open = null; //openning music
+    static Clip explode = null;
+
+    /* This function init Game screen parameter
+     * Provide setting option before starting the game
+     */
     public void launch() {
+        open = SoundUtil.playSoundWithVolume(GameUtil.rickMusic, true, volume);
+
         this.setVisible(true);
-        this.setSize(width,height);
+        this.setSize(width, height);
         this.setLocationRelativeTo(null);
-        this.setTitle("Airplane Battle");
+        this.setTitle(title);
         this.setDefaultCloseOperation(3);
+
         this.setLayout(null);
-
-        GameUtil.gameObjList.add(obj);
-        GameUtil.gameObjList.add(planeObj);
-
-        //initialize attributes and add 'START' button
-        startButton = new JButton(new ImageIcon(GameUtil.startButtonImage));
+        startButton = new JButton(new ImageIcon(GameUtil.startButton));
+        startButton.setBounds(width/2-90, height/3+20, 200, 100);
         startButton.setContentAreaFilled(false);
-        startButton.setFocusPainted(false);
-        startButton.setBounds(185, 250, 200, 100);
         this.add(startButton);
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                SoundUtil.stopSound(open); //stop music when the game start
+                currentState = GameState.GAMING;
                 startButton.setVisible(false);
-                state = 1;
+                settingButton.setVisible(false);
+                startButton = null;
+                settingButton = null;
                 repaint();
             }
         });
 
-        //initialize attributes and add 'SETTING' button
-        settingButton = new JButton(new ImageIcon(GameUtil.settingButtonImage));
-        settingButton.setContentAreaFilled(false);
-        settingButton.setFocusPainted(false);
-        settingButton.setBounds(185, 360, 200, 100);
-        settingButton.setUI(new BasicButtonUI()); 
+        settingButton = new JButton(new ImageIcon(GameUtil.settingButton));
+        settingButton.setBounds(width/2-90, height/3+130, 200, 100);
+        settingButton.setUI(new BasicButtonUI());
         this.add(settingButton);
         settingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SettingsDialog settingsDialog = new SettingsDialog(Planewar.this, width, height, volume);
-                settingsDialog.setVisible(true);
+                SoundUtil.stopSound(open); //stop music when set variables
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        new GameSettings().setVisible(true);
+                    }
+                });
             }
-        });
+        }); 
+        
+        // Add basic objects to game screen
+        GameUtil.gameObjList.add(backGround);
+        GameUtil.gameObjList.add(planeObj);
 
-        //initialize attributes of 'RETRY' button without adding it
-        retryButton = new JButton(new ImageIcon(GameUtil.retryButtonImage));
-        retryButton.setBounds(185, 250, 200, 110);
-        retryButton.setContentAreaFilled(false);
-        retryButton.setFocusPainted(false);
-        this.add(retryButton);
-        retryButton.setVisible(false);
-
-        //switch to english to stop the game
         this.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed (KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    switch (state) {
-                        case 1:
-                            state = 2;
+            public void keyPressed(KeyEvent e) {
+                /*
+                 * use getKeyCode() to detect keyboard input
+                 * For Windows, the spacebar keyCode is 32
+                 * For MacOS, the spacebar keyCode is 49
+                 * For Linux distro, the spacebar keyCode is 62
+                 */
+                if (e.getKeyCode() == 32 || e.getKeyCode() == 49 || e.getKeyCode() == 62) {
+                    switch (currentState) {
+                        case GAMING:
+                            backgroundClip.stop();
+                            currentState = GameState.PAUSE;
                             break;
-                        case 2:
-                            state = 1;
+                        case PAUSE:
+                            backgroundClip.start();
+                            currentState = GameState.GAMING;
                             break;
                         default:
-                            break;
                     }
                 }
             }
         });
-
-        //We need to set focus on KeyListener after using JButton
+        
+        // Set focus on KeyListener after using JButton
         this.setFocusable(true);
         this.requestFocusInWindow();
 
         while (true) {
-            if (state == 1) {
+            if (currentState == GameState.GAMING) {
                 createObj();
                 repaint();
-
-                //play BGM if it's not playing
-                if (!isBgMusicPlaying) {
-                    backgroundClip = SoundUtil.playSound("sounds/backgroundMusic.wav", true);
-                    isBgMusicPlaying = true;
-                }
-                
-                //set all buttons to be invisible during state 1
-                startButton.setVisible(false);
-                settingButton.setVisible(false);
-                retryButton.setVisible(false);
-            } else if (state == 2 || state == 3 || state == 4) {
-                //state 2 for pasuing, BGM plays ongoing
-                if (state != 2) {
+                if(!bossAlive) bossObj = null;
+                if(bossObj != null && !bossMusicPlaying) {
+                    /*
+                     * When boss appear
+                     * Stop normal background music
+                     * Play background music for specific boss
+                     */
                     SoundUtil.stopSound(backgroundClip);
-                }
-                settingButton.setVisible(true);
-                retryButton.setVisible(true);
-                retryButton.addActionListener(e -> {
-                    restartGame();
+                    backgroundClip = SoundUtil.playSoundWithVolume(backGroundMusic, true, volume);
+                    bossMusicPlaying = true;
+                } else if(bossObj == null && bossMusicPlaying) {
+                    /*
+                     * When there is no boss
+                     * Stop previouse boss background music
+                     * Play normal background music
+                     */
                     SoundUtil.stopSound(backgroundClip);
-                    state = 1;
-                    repaint();
-                });
-                isBgMusicPlaying = false;
-                
+                    backgroundClip = SoundUtil.playSoundWithVolume(GameUtil.backGroundMusic, true, volume);
+                    bossMusicPlaying = false;
+                }
+           } else {
+                // If GameOver stop background music
+                SoundUtil.stopSound(backgroundClip);
             }
+
+            // Time sleep for counting
             try {
                 Thread.sleep(25);
-            } catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    // Clear other game objects as needed
-    private void restartGame() {
-        state = 0;
-        score = 0;
-        planeObj.setX(250);
-        planeObj.setY(500);
-        GameUtil.gameObjList.clear();
-        GameUtil.shellObjList.clear();
-        GameUtil.enemyObjList.clear();
-        GameUtil.bulletObjList.clear();
-        GameUtil.removeList.clear();
-        GameUtil.gameObjList.add(obj);
-        GameUtil.gameObjList.add(planeObj);
-        bossObj = null;
-        enemyCount = 0;
-    }
-
     @Override
-    public void paint (Graphics g) {
+    public void paint(Graphics g) {
+
+        // Create gaming screen border
         if (offScreenImage == null) {
-            offScreenImage = createImage(width,height);
+            offScreenImage = createImage(width, height);
         }
         Graphics gImage = offScreenImage.getGraphics();
-        gImage.fillRect(0,0, width, height);
-        if (state == 0) {
-            gImage.drawImage(GameUtil.bgImag, 0, 0, getWidth(), getHeight(), this);
-            gImage.drawImage(GameUtil.bossImag,225,100,this);
-            gImage.drawImage(GameUtil.explodeImag,210,350,this);
+        gImage.fillRect(0, 0, width, height);
+        if (currentState == GameState.INITIAL) {
+            gImage.drawImage(GameUtil.bgImag, 0, 0, width, height, this);
+            gImage.drawImage(GameUtil.bossRickImag, width/10, height/6, this);
+            gImage.drawImage(GameUtil.bossTrumpImag, (width*9)/13, height/9, this);
+            gImage.drawImage(GameUtil.explodeImag, width/2-70, height/6, this);
         }
-        if (state == 1) {
-            for (int i=0 ; i<GameUtil.gameObjList.size() ; i++) {
+
+        if (currentState == GameState.GAMING) {
+            for (int i = 0; i < GameUtil.gameObjList.size(); i++) {
                 GameUtil.gameObjList.get(i).paintSelf(gImage);
             }
             GameUtil.gameObjList.removeAll(GameUtil.removeList);
         }
-        if (state == 3) {
-            gImage.drawImage(GameUtil.explodeImag, planeObj.getX() - 60, planeObj.getY() - 90,null);
-            SoundUtil.playSound("sounds/lose.wav", false);
-            GameUtil.drawWord(gImage,"GAME OVER",Color.RED,50,155,300);
+
+        if (currentState == GameState.GAMEOVER || currentState == GameState.VICTORY) {
+            SoundUtil.stopSound(backgroundClip);
+            gImage.drawImage(GameUtil.explodeImag, planeObj.getX() - 60, planeObj.getY() - 90, null);
+            lose = SoundUtil.playSoundWithVolume(GameUtil.loseSound, false, volume);
+            GameUtil.drawWord(gImage, "GAME OVER", Color.RED, 50, width/2-150, height/3);
+
+            if (retryButton == null) {
+                retryButton = new JButton(new ImageIcon(GameUtil.retryButton));
+                retryButton.setBounds( width/2-90, height/3+20, 174, 68);
+                retryButton.setUI(new BasicButtonUI());
+
+                retryButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        restartGameAfterGameOver();
+                    }
+                });
+                this.add(retryButton);
+            }
+            retryButton.setVisible(true);
+
+            if (homeButton == null) {
+                homeButton = new JButton(new ImageIcon(GameUtil.homeButoon));
+                homeButton.setBounds( width/2-90, height/3+100, 174, 68);
+                homeButton.setUI(new BasicButtonUI());
+
+                homeButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        resetGameToInitialState();
+                    }
+                });
+                this.add(homeButton);
+            }
+            homeButton.setVisible(true);
+
         }
-        if (state == 4) {
-            gImage.drawImage(GameUtil.explodeImag, bossObj.getX() - 30, bossObj.getY() - 40,null);
-            GameUtil.drawWord(gImage,"YOU WON",Color.GREEN,50,155,300);
+        if (currentState == GameState.VICTORY) {
+            win = SoundUtil.playSoundWithVolume(GameUtil.score100Sound, false, volume);
+            GameUtil.drawWord(gImage, "YOU WON", Color.GREEN, 50, width/2-125, height/3);
         }
-        GameUtil.drawWord(gImage,"SCORE : " + score,Color.GREEN,40,30,100);
-        g.drawImage(offScreenImage,0,0,null);
-        count++;        
+        if (currentState == GameState.GAMING || currentState == GameState.VICTORY || currentState == GameState.GAMEOVER) {
+            GameUtil.drawWord(gImage, "SCORE : " + score, Color.GREEN, 40, 30, 100);
+        }        
+        g.drawImage(offScreenImage, 0, 0, null);
+        count++;
     }
 
     void createObj() {
-        if (count % 15 == 0) {
-            GameUtil.shellObjList.add(new ShellObj(GameUtil.shellImag,planeObj.getX()+3,planeObj.getY()-16,14,29,5,this));
+        
+        // By count, when pass 25 * somethingProductivity, add object to the gaming
+        if (count % shellProductivity == 0) {
+            GameUtil.shellObjList.add(new ShellObj(GameUtil.shellImag, planeObj.getX() + 3, planeObj.getY() - 16, 14, 29, shellSpeed, this));
             GameUtil.gameObjList.add(GameUtil.shellObjList.get(GameUtil.shellObjList.size() - 1));
-            SoundUtil.playSound("sounds/plane_shoot1.wav", false);
+            SoundUtil.playSoundWithVolume(GameUtil.planeShootSound, false, volume*0.95f);
         }
-        if (count % 15 == 0) {
-            GameUtil.enemyObjList.add(new EnemyObj(GameUtil.enemyImag,(int)(Math.random()*12)*50,0,49,36,5,this));
+
+        if (count % enemyProductivity == 0) {
+            GameUtil.enemyObjList.add(new EnemyObj(GameUtil.enemyImag, (int) (Math.random() * (width/50)) * 50, 0, 49, 36, enemySpeed, this));
             GameUtil.gameObjList.add(GameUtil.enemyObjList.get(GameUtil.enemyObjList.size() - 1));
             enemyCount++;
         }
-        if (count % 15 == 0 && bossObj != null) {
-            GameUtil.bulletObjList.add(new BulletObj(GameUtil.bulletImag,bossObj.getX()+40,bossObj.getY()+85,15,25,5,this));
+
+        if (count % bulletProductivity == 0 && bossObj != null) {
+            GameUtil.bulletObjList.add(new BulletObj(GameUtil.bulletImag, bossObj.getX() + 40, bossObj.getY() + 85, 15, 25, bulletSpeed, this));
             GameUtil.gameObjList.add(GameUtil.bulletObjList.get(GameUtil.bulletObjList.size() - 1));
         }
-        if (enemyCount > 10 && bossObj == null) {
-            bossObj = new BossObj(GameUtil.bossImag,250,0,109,109,5,this);
+
+        // Control Game Level and Boss Type 
+        if(gameLevel == 0 && score > 10 && bossObj == null) {
+            gameLevel++;
+            bossAlive = true;
+            bossObj = new BossObj(GameUtil.bossRickImag, width/2, 20, 176, 155, bossSpeed, gameLevel, this);
+            backGroundMusic = GameUtil.rickMusic;
+            GameUtil.gameObjList.add(bossObj);
+        }
+
+        if(gameLevel == 1 && score > 30 && bossObj == null) {
+            gameLevel++;
+            bossAlive = true;
+            bossObj = new BossObj(GameUtil.bossTrumpImag, width/2, 20, 206, 217, bossSpeed, gameLevel, this);
+            backGroundMusic = GameUtil.shootingStarSound;
             GameUtil.gameObjList.add(bossObj);
         }
     }
-    public static void main (String args[]) {
+
+    private void restartGameAfterGameOver() {
+        SoundUtil.stopSound(lose);
+        SoundUtil.stopSound(explode);
+
+        GameUtil.gameObjList.clear();
+        GameUtil.bulletObjList.clear();
+        GameUtil.enemyObjList.clear();
+        GameUtil.shellObjList.clear();
+        GameUtil.removeList.clear();
+
+        backGround = new BgObj(GameUtil.bgImag, 0, -435, 2);
+        planeObj = new PlaneObj(GameUtil.planeImag, width/2+10, height/3+80, 20, 30, 0, this);
+        bossObj = null;
+        bossAlive = false;
+        startButton = null;
+        settingButton = null;
+
+        GameUtil.gameObjList.add(backGround);
+        GameUtil.gameObjList.add(planeObj);
+
+        currentState = GameState.GAMING;
+        score = 0;
+        count = 1;
+        enemyCount = 0;
+        gameLevel=0;
+
+        retryButton.setVisible(false);
+        retryButton = null;
+        homeButton.setVisible(false);
+        homeButton = null;
+        backgroundClip = SoundUtil.playSoundWithVolume(GameUtil.backGroundMusic, true, volume);
+    }
+
+    private void resetGameToInitialState() {
+        SoundUtil.stopSound(win);
+        SoundUtil.stopSound(lose);
+        SoundUtil.stopSound(explode);
+
+        currentState = GameState.INITIAL;
+        score = 0;
+        gameLevel = 0;
+        bossAlive = false;
+        bossMusicPlaying = false;
+
+        GameUtil.gameObjList.clear();
+        GameUtil.bulletObjList.clear();
+        GameUtil.enemyObjList.clear();
+        GameUtil.shellObjList.clear();
+        GameUtil.removeList.clear();
+
+        backGround = new BgObj(GameUtil.bgImag, 0, -435, 2);
+        planeObj = new PlaneObj(GameUtil.planeImag, width/2+10, height/3+80, 20, 30, 0, this);
+        bossObj = null;
+        startButton = null;
+        settingButton = null;
+
+        GameUtil.gameObjList.add(backGround);
+        GameUtil.gameObjList.add(planeObj);
+
+        repaint();
+
+        if (retryButton != null) {
+            retryButton.setVisible(false);
+            retryButton = null;
+        }
+        if (homeButton != null) {
+            homeButton.setVisible(false);
+            homeButton = null;
+        }
+
+        initializeButtons();
+        open = SoundUtil.playSoundWithVolume(GameUtil.rickMusic, true, volume);
+    }
+
+
+    private void initializeButtons() {
+        startButton = new JButton(new ImageIcon(GameUtil.startButton));
+        startButton.setBounds(width/2-90, height/3+20, 200, 100);
+        startButton.setContentAreaFilled(false);
+        this.add(startButton);
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SoundUtil.stopSound(open);
+                currentState = GameState.GAMING;
+                startButton.setVisible(false);
+                settingButton.setVisible(false);
+                startButton = null;
+                settingButton = null;
+                backgroundClip = SoundUtil.playSoundWithVolume(GameUtil.backGroundMusic, true, volume);
+                repaint();
+            }
+        });
+
+        settingButton = new JButton(new ImageIcon(GameUtil.settingButton));
+        settingButton.setBounds(width/2-90, height/3+130, 200, 100);
+        settingButton.setUI(new BasicButtonUI());
+        this.add(settingButton);
+        settingButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SoundUtil.stopSound(open);
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        new GameSettings().setVisible(true);
+                    }
+                });
+            }
+        }); 
+    }
+
+
+    //setting window size change 
+    public static void reinitializeComponents(Planewar mainFrame2) {
+        GameUtil.gameObjList.clear();
+        GameUtil.bulletObjList.clear();
+        GameUtil.enemyObjList.clear();
+        GameUtil.shellObjList.clear();
+        GameUtil.removeList.clear();
+    
+        mainFrame.setSize(width, height);
+        mainFrame.setLocationRelativeTo(null);
+            
+        BgObj backGround = new BgObj(GameUtil.bgImag, 0, -435, 2);
+        PlaneObj planeObj = new PlaneObj(GameUtil.planeImag, width/2+10, height/3+80, 20, 30, 0, mainFrame2);
+        GameUtil.gameObjList.add(backGround);
+        GameUtil.gameObjList.add(planeObj);
+
+        if (mainFrame2.startButton != null) {
+            mainFrame2.startButton.setBounds(width / 2 - 90, height / 3 + 20, 200, 100);
+            mainFrame2.add(mainFrame2.startButton);
+        }
+    
+        if (mainFrame2.settingButton != null) {
+            mainFrame2.settingButton.setBounds(width / 2 - 90, height / 3 + 130, 200, 100);
+            mainFrame2.add(mainFrame2.settingButton);
+        }
+    
+        mainFrame.repaint();
+    }
+
+    
+
+    public static void main(String args[]) {
         Planewar gameWin = new Planewar();
+        mainFrame = gameWin;
+        reinitializeComponents(gameWin);
         gameWin.launch();
     }
 }
+
