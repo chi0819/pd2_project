@@ -29,13 +29,13 @@ public class GameSettings extends JFrame {
     private Clip clip;
     private int currentVolume = (int)(Planewar.volume * 100);
     private String currentDifficulty = Planewar.Dfficulty;
-    private String currentWindowSize = Planewar.widowSize;
+    private String currentWindowSize = Planewar.windowSize;
 
     // Constructor to set up the GUI components
     public GameSettings() {
         setTitle("Game Settings");
         setSize(400, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         // Set patterns
@@ -182,6 +182,7 @@ public class GameSettings extends JFrame {
                 int height = Integer.parseInt(dimensions[1]);
                 Planewar.width = width;
                 Planewar.height = height;
+                Planewar.windowSize = windowSize;
 
                 Planewar.mainFrame.setSize(width,height);
                 Planewar.mainFrame.repaint();
