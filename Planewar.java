@@ -38,6 +38,11 @@ public class Planewar extends JFrame {
 
     // gameLevel determine how many boss player defeat
     public static int gameLevel = 0;
+
+    // Init background music is normal background music
+    public static String backGroundMusic = GameUtil.backGroundMusic;
+
+    // Control background music volume
     public static float volume = 0.8f;
 
     /* Because bossObj is non static object
@@ -45,8 +50,7 @@ public class Planewar extends JFrame {
      */
     public static boolean bossAlive = false;
 
-    // Init background music is normal background music
-    public static String backGroundMusic = GameUtil.backGroundMusic;
+    // Setting before gaming
     public static String Dfficulty = "Medium";
 
     //Init window title
@@ -56,11 +60,14 @@ public class Planewar extends JFrame {
     public static int bulletSpeed = 5;
     public static int enemySpeed = 5;
     public static int shellSpeed = 5;
-    public static int bulletProductivity = 15; //the smaller the number is, the higher the bullet productivity is
-    public static int enemyProductivity = 15; //the smaller the number is, the higher the enemy productivity is
-    public static int shellProductivity = 15; //the bigger the number is, the lower the shell productividy is
 
-    static Planewar mainFrame; //argument used to set window size
+    // The smaller the number is, the higher the bullet productivity is
+    public static int bulletProductivity = 15;
+    public static int enemyProductivity = 15;
+    public static int shellProductivity = 15;
+
+    //argument used to set window size
+    static Planewar mainFrame;
 
     /*
      * Time counter
@@ -201,6 +208,8 @@ public class Planewar extends JFrame {
                 // If GameOver stop background music
                 SoundUtil.stopSound(backgroundClip);
             }
+
+            // Time sleep for counting
             try {
                 Thread.sleep(25);
             } catch (InterruptedException e) {
@@ -234,7 +243,6 @@ public class Planewar extends JFrame {
 
         if (currentState == GameState.GAMEOVER || currentState == GameState.VICTORY) {
             SoundUtil.stopSound(backgroundClip);
-            //SoundUtil.stopSound(homestart);
             gImage.drawImage(GameUtil.explodeImag, planeObj.getX() - 60, planeObj.getY() - 90, null);
             lose = SoundUtil.playSoundWithVolume(GameUtil.loseSound, false, volume);
             GameUtil.drawWord(gImage, "GAME OVER", Color.RED, 50, width/2-150, height/3);
@@ -271,7 +279,6 @@ public class Planewar extends JFrame {
 
         }
         if (currentState == GameState.VICTORY) {
-            // gImage.drawImage(GameUtil.explodeImag, bossObj.getX() - 30, bossObj.getY() - 40, null);
             win = SoundUtil.playSoundWithVolume(GameUtil.score100Sound, false, volume);
             GameUtil.drawWord(gImage, "YOU WON", Color.GREEN, 50, width/2-125, height/3);
         }
@@ -283,16 +290,20 @@ public class Planewar extends JFrame {
     }
 
     void createObj() {
+        
+        // By count, when pass 25 * somethingProductivity, add object to the gaming
         if (count % shellProductivity == 0) {
             GameUtil.shellObjList.add(new ShellObj(GameUtil.shellImag, planeObj.getX() + 3, planeObj.getY() - 16, 14, 29, shellSpeed, this));
             GameUtil.gameObjList.add(GameUtil.shellObjList.get(GameUtil.shellObjList.size() - 1));
             SoundUtil.playSoundWithVolume(GameUtil.planeShootSound, false, volume*0.95f);
         }
+
         if (count % enemyProductivity == 0) {
             GameUtil.enemyObjList.add(new EnemyObj(GameUtil.enemyImag, (int) (Math.random() * (width/50)) * 50, 0, 49, 36, enemySpeed, this));
             GameUtil.gameObjList.add(GameUtil.enemyObjList.get(GameUtil.enemyObjList.size() - 1));
             enemyCount++;
         }
+
         if (count % bulletProductivity == 0 && bossObj != null) {
             GameUtil.bulletObjList.add(new BulletObj(GameUtil.bulletImag, bossObj.getX() + 40, bossObj.getY() + 85, 15, 25, bulletSpeed, this));
             GameUtil.gameObjList.add(GameUtil.bulletObjList.get(GameUtil.bulletObjList.size() - 1));
@@ -300,7 +311,6 @@ public class Planewar extends JFrame {
 
         // Control Game Level and Boss Type 
         if(gameLevel == 0 && score > 10 && bossObj == null) {
-            //SoundUtil.stopSound(homestart);
             gameLevel++;
             bossAlive = true;
             bossObj = new BossObj(GameUtil.bossRickImag, width/2, 20, 176, 155, bossSpeed, gameLevel, this);

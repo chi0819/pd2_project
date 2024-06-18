@@ -122,41 +122,51 @@
 
 # Appendix
 
-## Sounds
+## Installation
+Clone the project from remote  
+```
+$ git clone https://github.com/chi0819/pd2_project.git
+```
+Enter the project  
+```
+$ cd pd2_project
+```
+Install imgs and sounds source files from google drive  
+The URL is in the below Sounds&Images section  
+Create two directory to store images and sounds  
+```
+$ mkdir imgs
+$ mkdir sounds
+```
+### PVE Mode
+PVE mode is `Planewar.java`  
+Support : **Retry**, **Go back to home** and **gaming setting**  
+**How to play ?** : use the mouse to control the player's plane  
+
+Compilation  
+```
+$ javac Planewar.java
+```
+Run  
+```
+$ java Planewar
+```
+### PVP Mode
+PVP mode is `PVPmode.java`  
+**How to play ?** : player1 use *WASD* to control, player2 use arrow to control  
+
+Compilation  
+```
+$ javac PVPmode.java
+```
+Run  
+```
+$ java PVPmode
+```
+
+## Sounds&Images
 因為音檔和圖檔太大，所以放在 Google Drive 保存  
 如果有需要增加的音檔和圖檔直接上傳即可  
 https://drive.google.com/drive/folders/1zjGFyvsrUDqzNFvgbRj6ktaB3DS74_zv?usp=sharing  
 創建一個名叫 sounds 的資料夾，將音檔放在裡面  
 創建一個名叫 imgs 的資料夾，將圖檔放在裡面  
-
-## Planewar.java  
-### public class Planewar extends JFrame
-#### Parameters
-- width, height : 遊戲視窗的大小
-- state : 使用 `enum` 紀錄目前遊戲的狀態
-    - INITIAL : 遊戲初始化
-    - GAMING : 遊戲進行中
-    - PAUSE : 遊戲暫停
-    - VICTORY : 遊戲勝利
-
-- score : 紀錄目前的遊戲分數
-- gameLevel : 遊戲目前的關卡，會根據目前打到的 Boss 等級而有所調整
-- bossAlive : 判斷 Boss 是否還存活
-- backGroundMusic : 紀錄目前的背景音樂，有 Boss 時會有專屬於 Boss 的音樂
-- planeObj : 玩家的戰鬥機物件
-- bossObj : Boss 的物件
-
-#### Functions
-
-## PVPmode.java  
-- player1 : 鍵盤 WASD 控制方向
-- player2 : 鍵盤上下左右控制方向
-
-## Util
-### public class SoundUtil
-#### Parameters
-- clip : 紀錄音頻資料
-
-#### Functions
-- `public static Clip playSound ( String soundFile, boolean loop )` : 播放音頻檔案
-- `public static void stopSound ( Clip clip )` : 暫停音頻播放
